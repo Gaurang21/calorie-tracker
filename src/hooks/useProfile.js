@@ -18,6 +18,17 @@ const DEFAULT_PROFILE = {
   macro_fat_pct: 30,
   water_target_ml: 2500,
   gemini_api_key: null,
+  ollama_url: null,
+  ollama_api_key: null,
+  ai_features_enabled: {
+    weekly_summary: true,
+    ask_anything: true,
+    meal_suggestions: true,
+    food_swap: true,
+    daily_insights: true,
+    goal_pacing: true,
+    workout_suggestions: true,
+  },
   onboarding_complete: false,
 };
 

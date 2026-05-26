@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import AddFoodModal from './AddFoodModal.jsx';
+import FoodSwapSheet from '../ai/FoodSwapSheet.jsx';
 import { supabase } from '../../lib/supabase.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
+import { useOllama } from '../../hooks/useOllama.js';
 
 const MEAL_LABELS = {
   breakfast: '🥣 Breakfast',
@@ -10,9 +12,11 @@ const MEAL_LABELS = {
   snacks: '🍎 Snacks',
 };
 
-export default function FoodLogSection({ meal, entries, onAddEntry, onAddEntries, onDelete }) {
+export default function FoodLogSection({ meal, entries, onAddEntry, onAddEntries, onDelete, macroGaps }) {
   const { user } = useAuth();
+  const { enabled } = useOllama();
   const [open, setOpen] = useState(false);
+  const [swapFood, setSwapFood] = useState(null);
   const total = entries.reduce((acc, e) => acc + (e.calories || 0), 0);
 
   const saveAsTemplate = async () => {
@@ -49,7 +53,19 @@ export default function FoodLogSection({ meal, entries, onAddEntry, onAddEntries
                 {e.calories} kcal · P{Math.round(e.protein_g || 0)} C{Math.round(e.carbs_g || 0)} F{Math.round(e.fat_g || 0)}
               </div>
             </div>
-            <button onClick={() => onDelete(e.id)} aria-label={`Delete ${e.name}`} className="opacity-60 hover:opacity-100 ml-3">✕</button>
+            <div className="flex items-center gap-2 ml-3">
+              {enabled('food_swap') && (
+                <button
+                  data-testid={`swap-btn-${e.id}`}
+                  onClick={() => setSwapFood(e)}
+                  className="text-xs opacity-60 hover:opacity-100"
+                  aria-label={`Suggest swaps for ${e.name}`}
+                >
+                  Swap?
+                </button>
+              )}
+              <button onClick={() => onDelete(e.id)} aria-label={`Delete ${e.name}`} className="opacity-60 hover:opacity-100">✕</button>
+            </div>
           </div>
         ))}
       </div>
@@ -65,6 +81,26 @@ export default function FoodLogSection({ meal, entries, onAddEntry, onAddEntries
         meal={meal}
         onAddEntry={onAddEntry}
         onAddEntries={onAddEntries}
+      />
+      <FoodSwapSheet
+        open={!!swapFood}
+        onClose={() => setSwapFood(null)}
+        food={swapFood}
+        macroGaps={macroGaps}
+        onSwap={async (s) => {
+          if (!swapFood) return;
+          await onDelete(swapFood.id);
+          await onAddEntry({
+            meal,
+            name: s.name,
+            calories: Math.round(s.calories),
+            protein_g: s.protein_g || 0,
+            carbs_g: s.carbs_g || 0,
+            fat_g: s.fat_g || 0,
+            source: 'manual',
+          });
+          setSwapFood(null);
+        }}
       />
     </section>
   );

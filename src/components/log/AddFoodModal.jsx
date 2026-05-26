@@ -4,8 +4,10 @@ import ManualEntryTab from './ManualEntryTab.jsx';
 import PhotoUploadTab from './PhotoUploadTab.jsx';
 import BarcodeScannerTab from './BarcodeScannerTab.jsx';
 import MealTemplatesTab from './MealTemplatesTab.jsx';
+import NLPFoodTab from './NLPFoodTab.jsx';
 
 const TABS = [
+  { id: 'nlp', label: '✏️ Describe It' },
   { id: 'manual', label: '📝 Manual' },
   { id: 'photo', label: '📸 Photo' },
   { id: 'barcode', label: '📦 Barcode' },
@@ -38,6 +40,7 @@ export default function AddFoodModal({ open, onClose, meal, onAddEntry, onAddEnt
           </button>
         ))}
       </div>
+      {tab === 'nlp' && <NLPFoodTab meal={meal} onSaveMany={handleSaveMany} />}
       {tab === 'manual' && <ManualEntryTab meal={meal} onSave={handleSave} />}
       {tab === 'photo' && <PhotoUploadTab meal={meal} onSave={handleSave} />}
       {tab === 'barcode' && <BarcodeScannerTab meal={meal} onSave={handleSave} />}

@@ -3,6 +3,12 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Dashboard from '../../pages/Dashboard.jsx';
 
+vi.mock('../../contexts/AuthContext.jsx', () => ({
+  useAuth: () => ({ user: null }),
+}));
+vi.mock('../../lib/supabase.js', () => ({
+  supabase: { from: () => ({ select: () => ({ eq: () => ({ gte: () => ({ order: () => Promise.resolve({ data: [] }) }) }) }) }) },
+}));
 vi.mock('../../hooks/useProfile.js', () => ({
   useProfile: () => ({ profile: { name: 'Alex', water_target_ml: 2500, dark_mode: false } }),
 }));
@@ -24,6 +30,9 @@ vi.mock('../../hooks/useDailyTargets.js', () => ({
     calorieTarget: 2000,
     macros: { protein_g: 150, carbs_g: 200, fat_g: 67 },
   }),
+}));
+vi.mock('../../hooks/useOllama.js', () => ({
+  useOllama: () => ({ enabled: () => false, status: { checked: true, ok: false } }),
 }));
 vi.mock('../../hooks/useStreak.js', () => ({ useStreak: () => 0 }));
 

@@ -109,8 +109,8 @@ export default function Profile() {
       <section className="card p-4 space-y-3">
         <div className="font-semibold">Personal info</div>
         <div>
-          <label className="label">Name</label>
-          <input className="input" value={draft.name || ''} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
+          <label className="label" htmlFor="profile-name">Name</label>
+          <input id="profile-name" className="input" value={draft.name || ''} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>

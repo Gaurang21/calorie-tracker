@@ -109,16 +109,16 @@ export default function ManualEntryTab({ meal, onSave }) {
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="label">Protein (g)</label>
-          <input type="number" min="0" step="0.1" className="input" value={protein} onChange={(e) => setProtein(e.target.value)} />
+          <label className="label" htmlFor="protein">Protein (g)</label>
+          <input id="protein" type="number" min="0" step="0.1" className="input" value={protein} onChange={(e) => setProtein(e.target.value)} />
         </div>
         <div>
-          <label className="label">Carbs (g)</label>
-          <input type="number" min="0" step="0.1" className="input" value={carbs} onChange={(e) => setCarbs(e.target.value)} />
+          <label className="label" htmlFor="carbs">Carbs (g)</label>
+          <input id="carbs" type="number" min="0" step="0.1" className="input" value={carbs} onChange={(e) => setCarbs(e.target.value)} />
         </div>
         <div>
-          <label className="label">Fat (g)</label>
-          <input type="number" min="0" step="0.1" className="input" value={fat} onChange={(e) => setFat(e.target.value)} />
+          <label className="label" htmlFor="fat">Fat (g)</label>
+          <input id="fat" type="number" min="0" step="0.1" className="input" value={fat} onChange={(e) => setFat(e.target.value)} />
         </div>
       </div>
       <label className="flex items-center gap-2 text-sm">

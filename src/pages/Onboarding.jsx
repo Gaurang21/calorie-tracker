@@ -84,8 +84,8 @@ export default function Onboarding() {
           <div className="space-y-3">
             <h2 className="text-xl font-bold">Tell us about yourself</h2>
             <div>
-              <label className="label">Name</label>
-              <input className="input" value={data.name} onChange={set('name')} />
+              <label className="label" htmlFor="ob-name">Name</label>
+              <input id="ob-name" className="input" value={data.name} onChange={set('name')} />
             </div>
             <div>
               <label className="label">Sex</label>
@@ -103,8 +103,8 @@ export default function Onboarding() {
               </div>
             </div>
             <div>
-              <label className="label">Date of birth</label>
-              <input type="date" className="input" value={data.date_of_birth} onChange={set('date_of_birth')} />
+              <label className="label" htmlFor="ob-dob">Date of birth</label>
+              <input id="ob-dob" type="date" className="input" value={data.date_of_birth} onChange={set('date_of_birth')} />
             </div>
           </div>
         )}
@@ -128,12 +128,12 @@ export default function Onboarding() {
               </div>
             </div>
             <div>
-              <label className="label">Height (cm)</label>
-              <input type="number" className="input" value={data.height_cm} onChange={set('height_cm')} />
+              <label className="label" htmlFor="ob-height">Height (cm)</label>
+              <input id="ob-height" type="number" className="input" value={data.height_cm} onChange={set('height_cm')} />
             </div>
             <div>
-              <label className="label">Current weight (kg)</label>
-              <input type="number" step="0.1" className="input" value={data.weight_kg} onChange={set('weight_kg')} />
+              <label className="label" htmlFor="ob-weight">Current weight (kg)</label>
+              <input id="ob-weight" type="number" step="0.1" className="input" value={data.weight_kg} onChange={set('weight_kg')} />
             </div>
           </div>
         )}
@@ -162,8 +162,8 @@ export default function Onboarding() {
           <div className="space-y-3">
             <h2 className="text-xl font-bold">Your goal</h2>
             <div>
-              <label className="label">Target weight (kg)</label>
-              <input type="number" step="0.1" className="input" value={data.goal_weight_kg} onChange={set('goal_weight_kg')} />
+              <label className="label" htmlFor="ob-target-weight">Target weight (kg)</label>
+              <input id="ob-target-weight" type="number" step="0.1" className="input" value={data.goal_weight_kg} onChange={set('goal_weight_kg')} />
             </div>
             <div>
               <label className="label">Pace</label>

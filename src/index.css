@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --brand: #22b074;
+  --brand-soft: #d6f7e6;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+}
+
+.dark {
+  --bg: #0b1220;
+  --surface: #111a2e;
+  --surface-2: #1a2540;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #1f2a44;
+  --brand: #48cb90;
+  --brand-soft: #13593e;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+@layer components {
+  .card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    @apply rounded-2xl shadow-sm;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-medium transition active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-brand-500 text-white hover:bg-brand-600;
+  }
+  .btn-secondary {
+    @apply btn;
+    background-color: var(--surface-2);
+    color: var(--text);
+  }
+  .btn-ghost {
+    @apply btn hover:bg-black/5 dark:hover:bg-white/5;
+    color: var(--text);
+  }
+  .input {
+    @apply w-full rounded-xl px-3 py-2 outline-none transition focus:ring-2 focus:ring-brand-500/40;
+    background-color: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .label {
+    @apply text-sm font-medium block mb-1;
+    color: var(--text-muted);
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
+    background-color: var(--surface-2);
+    color: var(--text-muted);
+  }
+  .ring-progress {
+    transform: rotate(-90deg);
+  }
+}
+
+/* Hide scrollbars on tab bars */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

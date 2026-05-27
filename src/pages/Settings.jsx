@@ -2,13 +2,28 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { useProfile } from '../hooks/useProfile.js';
+import { useOllama } from '../hooks/useOllama.js';
+import { testConnection } from '../services/ollamaService.js';
+
+const AI_FEATURE_LABELS = {
+  weekly_summary: 'Weekly Summary',
+  ask_anything: 'Ask Anything Chat',
+  meal_suggestions: 'Meal Suggestions',
+  food_swap: 'Food Swap Suggestions',
+  daily_insights: 'Daily Insights',
+  goal_pacing: 'Goal Pacing Coach',
+  workout_suggestions: 'Workout Suggestions',
+};
 
 export default function Settings() {
   const { user, signOut } = useAuth();
   const { profile, update } = useProfile();
+  const { flags, setFlag } = useOllama();
   const [foods, setFoods] = useState([]);
   const [exportBusy, setExportBusy] = useState(false);
   const [importStatus, setImportStatus] = useState(null);
+  const [connStatus, setConnStatus] = useState({ checked: false, ok: false, models: [], error: null });
+  const [testing, setTesting] = useState(false);
 
   const loadFoods = async () => {
     if (!user) return;
@@ -179,9 +194,70 @@ export default function Settings() {
         </div>
       </section>
 
-      <section className="card p-4 space-y-3">
-        <div className="font-semibold">AI photo analysis</div>
+      <section className="card p-4 space-y-3" data-testid="ai-settings">
+        <div className="font-semibold">AI settings</div>
         <div>
+          <label className="label">Ollama server URL</label>
+          <input
+            data-testid="ollama-url"
+            className="input"
+            placeholder="https://your-oracle-ip"
+            value={profile.ollama_url || ''}
+            onChange={(e) => update({ ollama_url: e.target.value })}
+          />
+        </div>
+        <div>
+          <label className="label">Ollama API key</label>
+          <input
+            data-testid="ollama-key"
+            type="password"
+            className="input"
+            value={profile.ollama_api_key || ''}
+            onChange={(e) => update({ ollama_api_key: e.target.value })}
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            data-testid="test-connection"
+            onClick={async () => {
+              setTesting(true);
+              const res = await testConnection({ url: profile.ollama_url, apiKey: profile.ollama_api_key });
+              setConnStatus({ checked: true, ...res });
+              setTesting(false);
+            }}
+            disabled={testing}
+            className="btn-secondary"
+          >
+            {testing ? 'Testing…' : 'Test connection'}
+          </button>
+          {connStatus.checked && (
+            <span className="text-sm" data-testid="conn-status">
+              {connStatus.ok
+                ? `● Connected — ${connStatus.models?.[0] || 'model'} running ✅`
+                : `● Disconnected ❌ ${connStatus.error || ''}`}
+            </span>
+          )}
+        </div>
+
+        <div className="pt-2">
+          <div className="text-sm font-medium mb-2">AI features</div>
+          <div className="space-y-2">
+            {Object.entries(AI_FEATURE_LABELS).map(([key, label]) => (
+              <label key={key} className="flex items-center justify-between text-sm">
+                <span>{label}</span>
+                <input
+                  type="checkbox"
+                  data-testid={`flag-${key}`}
+                  checked={flags[key] !== false}
+                  onChange={(e) => setFlag(key, e.target.checked)}
+                />
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
+          <div className="text-sm font-medium mb-1">Photo analysis (Gemini)</div>
           <label className="label">Gemini API key</label>
           <input
             data-testid="gemini-key"

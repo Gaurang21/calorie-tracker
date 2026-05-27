@@ -18,7 +18,7 @@ vi.mock('../../lib/supabase.js', () => {
 });
 
 describe('AddFoodModal', () => {
-  it('renders all 4 tabs when open', () => {
+  it('renders all 5 tabs when open', () => {
     render(
       <AddFoodModal
         open
@@ -28,6 +28,7 @@ describe('AddFoodModal', () => {
         onAddEntries={vi.fn()}
       />
     );
+    expect(screen.getByTestId('tab-nlp')).toBeInTheDocument();
     expect(screen.getByTestId('tab-manual')).toBeInTheDocument();
     expect(screen.getByTestId('tab-photo')).toBeInTheDocument();
     expect(screen.getByTestId('tab-barcode')).toBeInTheDocument();

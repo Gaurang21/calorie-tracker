@@ -5,6 +5,7 @@ const items = [
   { to: '/', label: 'Dashboard', icon: '🏠' },
   { to: '/log', label: 'Log', icon: '🍽️' },
   { to: '/trends', label: 'Trends', icon: '📈' },
+  { to: '/ai-chat', label: 'AI Chat', icon: '💬' },
   { to: '/profile', label: 'Profile', icon: '👤' },
   { to: '/settings', label: 'Settings', icon: '⚙️' },
 ];

@@ -5,7 +5,7 @@ test.describe('dashboard', () => {
   test('loads without errors and shows greeting', async ({ page }) => {
     await signupAndOnboard(page, { email: 'dash@example.com' });
     await expect(page.getByText(/Alex/)).toBeVisible();
-    await expect(page.getByText(/kcal left/i)).toBeVisible();
+    await expect(page.getByText(/kcal left/i).first()).toBeVisible();
     await expect(page.getByText('Macros')).toBeVisible();
     await expect(page.getByText('Water')).toBeVisible();
     await expect(page.getByText('Net calories')).toBeVisible();

@@ -10,6 +10,7 @@ import Log from './pages/Log.jsx';
 import Trends from './pages/Trends.jsx';
 import Profile from './pages/Profile.jsx';
 import Settings from './pages/Settings.jsx';
+import AIChat from './pages/AIChat.jsx';
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/log" element={<Log />} />
         <Route path="/trends" element={<Trends />} />
+        <Route path="/ai-chat" element={<AIChat />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
       </Route>

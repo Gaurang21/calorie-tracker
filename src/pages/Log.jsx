@@ -2,11 +2,13 @@ import { useState } from 'react';
 import FoodLogSection from '../components/log/FoodLogSection.jsx';
 import ActivityLogSection from '../components/activity/ActivityLogSection.jsx';
 import ProgressBar from '../components/common/ProgressBar.jsx';
+import WorkoutSuggestionCard from '../components/ai/WorkoutSuggestionCard.jsx';
 import { useProfile } from '../hooks/useProfile.js';
 import { useFoodLog } from '../hooks/useFoodLog.js';
 import { useActivityLog } from '../hooks/useActivityLog.js';
 import { useWaterLog } from '../hooks/useWaterLog.js';
 import { useDailyTargets } from '../hooks/useDailyTargets.js';
+import { useOllama } from '../hooks/useOllama.js';
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const MEALS = ['breakfast', 'lunch', 'dinner', 'snacks'];
@@ -17,11 +19,18 @@ export default function Log() {
   const { byMeal, totals, addEntry, addEntries, deleteEntry } = useFoodLog(date);
   const { entries: activity, totalBurned, addEntry: addActivity, deleteEntry: deleteActivity } = useActivityLog(date);
   const { amountMl, add: addWater } = useWaterLog(date);
-  const { calorieTarget, currentWeightKg } = useDailyTargets(profile);
+  const { calorieTarget, currentWeightKg, macros } = useDailyTargets(profile);
+  const { enabled } = useOllama();
 
   const waterTarget = profile?.water_target_ml || 2500;
   const net = totals.calories - totalBurned;
   const netOk = net <= calorieTarget;
+  const macroGaps = {
+    protein: Math.max(0, (macros?.protein_g || 0) - Math.round(totals.protein_g)),
+    carbs: Math.max(0, (macros?.carbs_g || 0) - Math.round(totals.carbs_g)),
+    fat: Math.max(0, (macros?.fat_g || 0) - Math.round(totals.fat_g)),
+  };
+  const lastActivity = activity[activity.length - 1];
 
   return (
     <div className="space-y-5">
@@ -44,6 +53,7 @@ export default function Log() {
           onAddEntry={addEntry}
           onAddEntries={addEntries}
           onDelete={deleteEntry}
+          macroGaps={macroGaps}
         />
       ))}
 
@@ -53,6 +63,22 @@ export default function Log() {
         onDelete={deleteActivity}
         weightKg={currentWeightKg || 70}
       />
+
+      {enabled('workout_suggestions') && lastActivity && (
+        <WorkoutSuggestionCard
+          kind="recovery"
+          activityLog={{
+            recentSessions: activity.slice(-3).map((a) => a.activity_type),
+            lastSession: lastActivity.activity_type,
+            daysSinceLast: 0,
+          }}
+          calorieData={{
+            burned: totalBurned,
+            protein: Math.round(totals.protein_g),
+            proteinGoal: macros?.protein_g || 0,
+          }}
+        />
+      )}
 
       <section className="card p-4">
         <div className="flex items-center justify-between mb-2">

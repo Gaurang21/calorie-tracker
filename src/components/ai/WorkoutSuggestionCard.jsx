@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Activity, Heart, X } from 'lucide-react';
 import { generateWorkoutSuggestion } from '../../services/aiService.js';
 
 export default function WorkoutSuggestionCard({ kind = 'recovery', activityLog, calorieData }) {
@@ -18,19 +19,29 @@ export default function WorkoutSuggestionCard({ kind = 'recovery', activityLog, 
 
   if (dismissed || (!message && !busy && !error)) return null;
 
+  const Icon = kind === 'recovery' ? Heart : Activity;
+  const tone = kind === 'recovery' ? 'var(--ruby)' : 'var(--brand)';
+
   return (
-    <section className="card p-4" data-testid="workout-suggestion">
+    <section className="card p-5" data-testid="workout-suggestion">
       <div className="flex items-start gap-3">
-        <div className="text-xl">{kind === 'recovery' ? '🧊' : '🚶'}</div>
-        <div className="flex-1">
-          <div className="text-xs uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>
-            {kind === 'recovery' ? 'Recovery tip' : 'Movement nudge'}
+        <div
+          className="h-9 w-9 rounded-2xl grid place-items-center shrink-0"
+          style={{ backgroundColor: `${tone}1A`, color: tone }}
+        >
+          <Icon size={18} strokeWidth={2} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="eyebrow mb-1">
+            {kind === 'recovery' ? 'Recovery Tip' : 'Movement Nudge'}
           </div>
-          {busy && <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Thinking…</div>}
-          {message && <div className="text-sm">{message}</div>}
+          {busy && <div className="text-[14px]" style={{ color: 'var(--text-muted)' }}>Thinking…</div>}
+          {message && <div className="text-[14px] leading-relaxed">{message}</div>}
           {error && <div className="text-xs" style={{ color: 'var(--danger)' }}>{error}</div>}
         </div>
-        <button aria-label="Dismiss" onClick={() => setDismissed(true)} className="opacity-60 hover:opacity-100">✕</button>
+        <button aria-label="Dismiss" onClick={() => setDismissed(true)} className="opacity-50 hover:opacity-100 transition shrink-0">
+          <X size={16} />
+        </button>
       </div>
     </section>
   );

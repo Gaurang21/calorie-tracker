@@ -27,26 +27,41 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-sm card p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="h-9 w-9 rounded-xl bg-brand-500 grid place-items-center text-white font-bold">C</div>
-          <h1 className="text-xl font-bold">Welcome back</h1>
+    <div className="min-h-screen flex items-center justify-center p-4 auth-bg">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col items-center mb-8">
+          <div
+            className="h-14 w-14 rounded-3xl grid place-items-center text-white font-semibold text-xl mb-4"
+            style={{
+              background: 'linear-gradient(135deg, #5fd589, #30D158)',
+              boxShadow: '0 10px 30px var(--brand-glow)',
+            }}
+          >
+            C
+          </div>
+          <h1 className="text-[26px] font-bold tracking-tight2">Welcome back</h1>
+          <p className="text-[14px] mt-1.5" style={{ color: 'var(--text-muted)' }}>
+            Sign in to continue your progress.
+          </p>
         </div>
-        <form onSubmit={onSubmit} className="space-y-3">
-          <div>
-            <label className="label" htmlFor="email">Email</label>
-            <input id="email" type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div>
-            <label className="label" htmlFor="password">Password</label>
-            <input id="password" type="password" required autoComplete="current-password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          {error && <div data-testid="auth-error" className="text-sm" style={{ color: 'var(--danger)' }}>{error}</div>}
-          <button disabled={busy} className="btn-primary w-full">{busy ? 'Signing in…' : 'Sign in'}</button>
-        </form>
-        <button onClick={signInWithGoogle} className="btn-secondary w-full mt-3">Continue with Google</button>
-        <div className="mt-4 text-sm flex items-center justify-between" style={{ color: 'var(--text-muted)' }}>
+
+        <div className="card p-6">
+          <form onSubmit={onSubmit} className="space-y-3.5">
+            <div>
+              <label className="label" htmlFor="email">Email</label>
+              <input id="email" type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div>
+              <label className="label" htmlFor="password">Password</label>
+              <input id="password" type="password" required autoComplete="current-password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            {error && <div data-testid="auth-error" className="text-[13px]" style={{ color: 'var(--danger)' }}>{error}</div>}
+            <button disabled={busy} className="btn-primary w-full mt-1">{busy ? 'Signing in…' : 'Sign in'}</button>
+          </form>
+          <button onClick={signInWithGoogle} className="btn-secondary w-full mt-3">Continue with Google</button>
+        </div>
+
+        <div className="mt-5 text-[13px] flex items-center justify-between px-1" style={{ color: 'var(--text-muted)' }}>
           <Link to="/reset" className="hover:underline">Forgot password?</Link>
           <Link to="/signup" className="hover:underline">Create account</Link>
         </div>

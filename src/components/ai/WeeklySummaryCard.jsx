@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Sparkles, ChevronUp, ChevronDown } from 'lucide-react';
 import { supabase } from '../../lib/supabase.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { generateWeeklySummary } from '../../services/aiService.js';
@@ -100,26 +101,29 @@ export default function WeeklySummaryCard({ profile, calorieTarget, macroTargets
   }
 
   return (
-    <section className="card p-5" data-testid="weekly-summary">
+    <section className="card p-6" data-testid="weekly-summary">
       <div className="flex items-center justify-between">
-        <div className="font-semibold flex items-center gap-2">✨ Your week in review</div>
-        <button onClick={() => setCollapsed((c) => !c)} className="text-sm opacity-60 hover:opacity-100">
-          {collapsed ? 'Show' : 'Hide'}
+        <h2 className="font-semibold text-[17px] tracking-tight2 flex items-center gap-2">
+          <Sparkles size={18} strokeWidth={2} style={{ color: 'var(--brand)' }} />
+          Your week in review
+        </h2>
+        <button onClick={() => setCollapsed((c) => !c)} className="opacity-50 hover:opacity-100 transition">
+          {collapsed ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
         </button>
       </div>
       {!collapsed && (
-        <div className="mt-3 space-y-3">
+        <div className="mt-4 space-y-3">
           {summary ? (
             <>
-              <p className="text-sm leading-relaxed">{summary}</p>
-              <div className="text-xs flex items-center justify-between" style={{ color: 'var(--text-muted)' }}>
+              <p className="text-[14px] leading-relaxed">{summary}</p>
+              <div className="text-[12px] flex items-center justify-between" style={{ color: 'var(--text-muted)' }}>
                 <span>Generated {createdAt ? new Date(createdAt).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }) : ''}</span>
-                <button onClick={generate} disabled={busy} className="underline hover:no-underline">Regenerate</button>
+                <button onClick={generate} disabled={busy} className="hover:underline">Regenerate</button>
               </div>
             </>
           ) : (
             <>
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+              <p className="text-[14px]" style={{ color: 'var(--text-muted)' }}>
                 Get an AI-generated recap of your past week.
               </p>
               <button onClick={generate} disabled={busy} className="btn-primary w-full" data-testid="weekly-generate">

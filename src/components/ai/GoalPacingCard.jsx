@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Target } from 'lucide-react';
 import { supabase } from '../../lib/supabase.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { generateGoalPacingMessage } from '../../services/aiService.js';
@@ -90,22 +91,25 @@ export default function GoalPacingCard({ profile, calorieTarget }) {
   const ratio = stats.projectedWeeklyDeficit / (stats.weeklyCalorieTarget || 1);
   const onTrack = Math.abs(ratio - 1) <= 0.15;
   const slightlyOff = !onTrack && Math.abs(ratio - 1) <= 0.4;
-  const color = onTrack ? 'var(--brand)' : slightlyOff ? '#f59e0b' : 'var(--danger)';
-  const label = onTrack ? 'On track' : slightlyOff ? 'Slightly off pace' : 'Off pace';
+  const color = onTrack ? 'var(--brand)' : slightlyOff ? 'var(--amber)' : 'var(--ruby)';
+  const label = onTrack ? 'On Track' : slightlyOff ? 'Slightly Off' : 'Off Pace';
 
   return (
-    <section className="card p-4" data-testid="goal-pacing">
-      <div className="flex items-center justify-between mb-2">
-        <div className="font-semibold">🎯 Goal pace</div>
-        <span className="chip" style={{ backgroundColor: 'transparent', color, border: `1px solid ${color}` }}>{label}</span>
+    <section className="card p-6" data-testid="goal-pacing">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-semibold text-[17px] tracking-tight2 flex items-center gap-2">
+          <Target size={18} strokeWidth={2} style={{ color }} />
+          Goal pace
+        </h2>
+        <span className="chip" style={{ color, borderColor: color, backgroundColor: 'transparent' }}>{label}</span>
       </div>
-      <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
-        Projected weekly deficit: <span className="font-medium" style={{ color: 'var(--text)' }}>{stats.projectedWeeklyDeficit} kcal</span> · target: <span className="font-medium" style={{ color: 'var(--text)' }}>{stats.weeklyCalorieTarget} kcal</span>
+      <div className="text-[13px] tabular" style={{ color: 'var(--text-muted)' }}>
+        Projected: <span className="font-medium" style={{ color: 'var(--text)' }}>{stats.projectedWeeklyDeficit} kcal</span> · target: <span className="font-medium" style={{ color: 'var(--text)' }}>{stats.weeklyCalorieTarget} kcal</span>
       </div>
       {message ? (
-        <p className="text-sm mt-2">{message}</p>
+        <p className="text-[14px] mt-3 leading-relaxed">{message}</p>
       ) : (
-        <button onClick={generate} disabled={busy} className="btn-secondary text-sm mt-2">
+        <button onClick={generate} disabled={busy} className="btn-secondary text-sm mt-3">
           {busy ? 'Coaching…' : 'Get pacing tip'}
         </button>
       )}

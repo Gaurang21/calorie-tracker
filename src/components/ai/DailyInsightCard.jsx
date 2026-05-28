@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Lightbulb, X } from 'lucide-react';
 import { generateDailyInsight } from '../../services/aiService.js';
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
@@ -42,21 +43,26 @@ export default function DailyInsightCard({ todayData, recentHistory }) {
   if (dismissed || (!insight && !busy && !error)) return null;
 
   return (
-    <section className="card p-4" data-testid="daily-insight">
+    <section className="card p-5" data-testid="daily-insight">
       <div className="flex items-start gap-3">
-        <div className="text-xl">💡</div>
-        <div className="flex-1">
-          <div className="text-xs uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Today's insight</div>
-          {busy && <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Thinking…</div>}
-          {insight && <div className="text-sm">{insight}</div>}
+        <div
+          className="h-9 w-9 rounded-2xl grid place-items-center shrink-0"
+          style={{ backgroundColor: 'var(--brand-soft)', color: 'var(--brand)' }}
+        >
+          <Lightbulb size={18} strokeWidth={2} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="eyebrow mb-1">Today's Insight</div>
+          {busy && <div className="text-[14px]" style={{ color: 'var(--text-muted)' }}>Thinking…</div>}
+          {insight && <div className="text-[14px] leading-relaxed">{insight}</div>}
           {error && <div className="text-xs" style={{ color: 'var(--danger)' }}>{error}</div>}
         </div>
         <button
           aria-label="Dismiss insight"
           onClick={() => { localStorage.setItem(DISMISS_KEY, '1'); setDismissed(true); }}
-          className="opacity-60 hover:opacity-100"
+          className="opacity-50 hover:opacity-100 transition shrink-0"
         >
-          ✕
+          <X size={16} />
         </button>
       </div>
     </section>

@@ -28,29 +28,46 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-sm card p-6">
-        <h1 className="text-xl font-bold mb-1">Create your account</h1>
-        <p className="text-sm mb-5" style={{ color: 'var(--text-muted)' }}>Track calories, macros, water, and activity.</p>
-        <form onSubmit={onSubmit} className="space-y-3" noValidate>
-          <div>
-            <label className="label" htmlFor="email">Email</label>
-            <input id="email" type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
+    <div className="min-h-screen flex items-center justify-center p-4 auth-bg">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col items-center mb-8">
+          <div
+            className="h-14 w-14 rounded-3xl grid place-items-center text-white font-semibold text-xl mb-4"
+            style={{
+              background: 'linear-gradient(135deg, #5fd589, #30D158)',
+              boxShadow: '0 10px 30px var(--brand-glow)',
+            }}
+          >
+            C
           </div>
-          <div>
-            <label className="label" htmlFor="password">Password</label>
-            <input id="password" type="password" required autoComplete="new-password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <div>
-            <label className="label" htmlFor="confirm">Confirm password</label>
-            <input id="confirm" type="password" required autoComplete="new-password" className="input" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
-          </div>
-          {error && <div data-testid="auth-error" className="text-sm" style={{ color: 'var(--danger)' }}>{error}</div>}
-          <button disabled={busy} className="btn-primary w-full">{busy ? 'Creating account…' : 'Create account'}</button>
-        </form>
-        <button onClick={signInWithGoogle} className="btn-secondary w-full mt-3">Continue with Google</button>
-        <div className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>
-          Already have an account? <Link to="/login" className="text-brand-600 hover:underline">Sign in</Link>
+          <h1 className="text-[26px] font-bold tracking-tight2">Track every day</h1>
+          <p className="text-[14px] mt-1.5 text-center" style={{ color: 'var(--text-muted)' }}>
+            Calories, macros, water, and activity — clean and simple.
+          </p>
+        </div>
+
+        <div className="card p-6">
+          <form onSubmit={onSubmit} className="space-y-3.5" noValidate>
+            <div>
+              <label className="label" htmlFor="email">Email</label>
+              <input id="email" type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div>
+              <label className="label" htmlFor="password">Password</label>
+              <input id="password" type="password" required autoComplete="new-password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <div>
+              <label className="label" htmlFor="confirm">Confirm password</label>
+              <input id="confirm" type="password" required autoComplete="new-password" className="input" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+            </div>
+            {error && <div data-testid="auth-error" className="text-[13px]" style={{ color: 'var(--danger)' }}>{error}</div>}
+            <button disabled={busy} className="btn-primary w-full mt-1">{busy ? 'Creating account…' : 'Create account'}</button>
+          </form>
+          <button onClick={signInWithGoogle} className="btn-secondary w-full mt-3">Continue with Google</button>
+        </div>
+
+        <div className="mt-5 text-[13px] text-center" style={{ color: 'var(--text-muted)' }}>
+          Already have an account? <Link to="/login" className="font-medium" style={{ color: 'var(--brand)' }}>Sign in</Link>
         </div>
       </div>
     </div>

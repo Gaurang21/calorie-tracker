@@ -16,8 +16,8 @@ export default function AppShell() {
   return (
     <div className="min-h-screen flex">
       <Sidebar />
-      <main className="flex-1 min-w-0 pb-20 md:pb-0">
-        <div className="max-w-3xl mx-auto px-4 md:px-8 py-6">
+      <main className="flex-1 min-w-0 pb-24 md:pb-0">
+        <div className="max-w-2xl mx-auto px-4 md:px-8 py-6 md:py-10">
           <Outlet />
         </div>
       </main>

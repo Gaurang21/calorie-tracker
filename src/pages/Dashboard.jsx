@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Flame, Droplet, Plus, Activity, TrendingUp } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile.js';
 import { useFoodLog } from '../hooks/useFoodLog.js';
 import { useActivityLog } from '../hooks/useActivityLog.js';
@@ -90,64 +91,85 @@ export default function Dashboard() {
     nav('/log');
   };
 
+  const waterPct = Math.round((amountMl / waterTarget) * 100);
+
   return (
-    <div className="space-y-5">
-      <header className="flex items-center justify-between">
+    <div className="space-y-5 stagger">
+      <header className="flex items-end justify-between">
         <div>
-          <div className="text-2xl font-bold">{greeting()}, {profile?.name || 'friend'} 👋</div>
-          <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Here's your day at a glance.</div>
+          <div className="eyebrow mb-1.5">{new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+          <h1 className="text-[28px] font-bold tracking-tight2">
+            {greeting()}, {profile?.name || 'there'}
+          </h1>
         </div>
         {streak > 0 && (
-          <div className="chip">🔥 {streak} day streak</div>
+          <div className="chip chip-brand">
+            <Flame size={14} strokeWidth={2.4} />
+            <span className="tabular">{streak} day streak</span>
+          </div>
         )}
       </header>
 
-      <section className="card p-5">
+      {/* HERO — calorie ring + key stats */}
+      <section className="card p-7">
         <CalorieRing eaten={totals.calories} target={calorieTarget} burned={totalBurned} />
-        <div className="grid grid-cols-3 mt-4 text-center">
-          <div>
-            <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Eaten</div>
-            <div className="font-semibold">{totals.calories}</div>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Burned</div>
-            <div className="font-semibold">{totalBurned}</div>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Goal</div>
-            <div className="font-semibold">{calorieTarget}</div>
-          </div>
+        <div className="hairline mt-6" />
+        <div className="grid grid-cols-3 mt-5 text-center">
+          <Stat label="Eaten" value={totals.calories} />
+          <Stat label="Burned" value={totalBurned} />
+          <Stat label="Goal" value={calorieTarget} />
         </div>
       </section>
 
-      <section className="card p-5">
-        <div className="font-semibold mb-3">Macros</div>
-        <div className="space-y-3">
-          <ProgressBar label="Protein" value={Math.round(totals.protein_g)} max={macros.protein_g} right={`${Math.round(totals.protein_g)}g / ${macros.protein_g}g`} color="#3b82f6" />
-          <ProgressBar label="Carbs" value={Math.round(totals.carbs_g)} max={macros.carbs_g} right={`${Math.round(totals.carbs_g)}g / ${macros.carbs_g}g`} color="#f59e0b" />
-          <ProgressBar label="Fat" value={Math.round(totals.fat_g)} max={macros.fat_g} right={`${Math.round(totals.fat_g)}g / ${macros.fat_g}g`} color="#ef4444" />
+      {/* Macros */}
+      <section className="card p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-semibold text-[17px] tracking-tight2">Macros</h2>
+          <div className="eyebrow">EAT</div>
+        </div>
+        <div className="space-y-4">
+          <ProgressBar label="Protein" value={Math.round(totals.protein_g)} max={macros.protein_g} right={`${Math.round(totals.protein_g)}g / ${macros.protein_g}g`} color="var(--sky)" />
+          <ProgressBar label="Carbs" value={Math.round(totals.carbs_g)} max={macros.carbs_g} right={`${Math.round(totals.carbs_g)}g / ${macros.carbs_g}g`} color="var(--amber)" />
+          <ProgressBar label="Fat" value={Math.round(totals.fat_g)} max={macros.fat_g} right={`${Math.round(totals.fat_g)}g / ${macros.fat_g}g`} color="var(--ruby)" />
         </div>
       </section>
 
-      <section className="card p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div className="font-semibold">Water</div>
-          <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{amountMl}ml / {waterTarget}ml</div>
+      {/* Water */}
+      <section className="card p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-semibold text-[17px] tracking-tight2 flex items-center gap-2">
+            <Droplet size={18} strokeWidth={2} className="text-sky-500" style={{ color: 'var(--sky)' }} />
+            Water
+          </h2>
+          <div className="eyebrow tabular">{waterPct}%</div>
         </div>
-        <ProgressBar label="" value={amountMl} max={waterTarget} right={`${Math.round((amountMl / waterTarget) * 100)}%`} color="#0ea5e9" />
-        <div className="grid grid-cols-4 gap-2 mt-3">
+        <ProgressBar value={amountMl} max={waterTarget} right={`${amountMl} / ${waterTarget} ml`} color="var(--sky)" />
+        <div className="grid grid-cols-4 gap-2 mt-4">
           {[250, 500, 750].map((ml) => (
-            <button key={ml} onClick={() => add(ml)} className="btn-secondary text-sm">+{ml}ml</button>
+            <button key={ml} onClick={() => add(ml)} className="btn-secondary text-sm">+{ml}</button>
           ))}
-          <button onClick={() => add(-250)} className="btn-secondary text-sm">−250ml</button>
+          <button onClick={() => add(-250)} className="btn-secondary text-sm">−250</button>
         </div>
       </section>
 
-      <section className={`card p-5 ${netOk ? '' : 'border-amber-400'}`}>
-        <div className="font-semibold mb-2">Net calories</div>
-        <div className="text-3xl font-bold">{net}</div>
-        <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
-          Goal {calorieTarget} {netOk ? '✅' : netGoalDiff > 0 ? '⚠️ over' : '⚠️ under'}
+      {/* Net calories — featured */}
+      <section className="card p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="eyebrow mb-2">Net calories</div>
+            <div className="hero-num text-[44px] tabular">{net}</div>
+            <div className="text-[13px] mt-2 tabular" style={{ color: 'var(--text-muted)' }}>
+              Goal {calorieTarget}
+            </div>
+          </div>
+          <div
+            className="chip"
+            style={netOk
+              ? { color: 'var(--brand)', backgroundColor: 'var(--brand-soft)', borderColor: 'transparent' }
+              : { color: 'var(--warning)', borderColor: 'var(--warning)', backgroundColor: 'transparent' }}
+          >
+            {netOk ? 'On Target' : netGoalDiff > 0 ? 'Over' : 'Under'}
+          </div>
         </div>
       </section>
 
@@ -196,10 +218,24 @@ export default function Dashboard() {
 
       <button
         onClick={() => nav('/log')}
-        className="fixed bottom-20 md:bottom-6 right-4 md:right-8 z-30 btn-primary shadow-lg rounded-full px-5 py-3"
+        className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-30 flex items-center gap-2 px-5 py-3.5 rounded-full text-white font-medium text-[15px] transition active:scale-[0.97]"
+        style={{
+          background: 'linear-gradient(135deg, #5fd589, #30D158)',
+          boxShadow: '0 10px 28px var(--brand-glow), 0 2px 6px rgba(0,0,0,0.1)',
+        }}
       >
-        <span className="text-lg">＋</span> Log food
+        <Plus size={18} strokeWidth={2.5} />
+        Log food
       </button>
+    </div>
+  );
+}
+
+function Stat({ label, value }) {
+  return (
+    <div>
+      <div className="eyebrow mb-1.5">{label}</div>
+      <div className="text-[20px] font-semibold tabular" style={{ letterSpacing: '-0.02em' }}>{value}</div>
     </div>
   );
 }

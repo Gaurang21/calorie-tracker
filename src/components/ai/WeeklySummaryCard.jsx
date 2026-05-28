@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
-import { generateWeeklySummary } from '../../services/ollamaService.js';
+import { generateWeeklySummary } from '../../services/aiService.js';
 
 function mondayOf(date = new Date()) {
   const d = new Date(date);

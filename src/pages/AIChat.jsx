@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { useProfile } from '../hooks/useProfile.js';
 import { useDailyTargets } from '../hooks/useDailyTargets.js';
-import { answerDataQuestion } from '../services/ollamaService.js';
+import { answerDataQuestion } from '../services/aiService.js';
 
 const STARTERS = [
   'How many calories did I average last week?',

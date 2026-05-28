@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { generateDailyInsight } from '../../services/ollamaService.js';
+import { generateDailyInsight } from '../../services/aiService.js';
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
 const DISMISS_KEY = `daily-insight-dismissed-${todayKey()}`;

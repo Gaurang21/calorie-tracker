@@ -48,7 +48,7 @@ Every AI feature degrades gracefully — if Ollama is unreachable the rest of th
 | Food DB | Open Food Facts API (free, no key) |
 | Barcode | `html5-qrcode` |
 | Photo AI | Gemini 1.5 Flash (currently stubbed in `src/services/geminiService.js`) |
-| Text AI | Self-hosted Ollama + Llama 3.2 on Oracle Cloud free tier |
+| Text AI | Pluggable — Groq (hosted) or Ollama (self-hosted). Switch with `VITE_AI_PROVIDER=groq\|ollama`. |
 | Routing | React Router v6 |
 | Unit tests | Vitest + React Testing Library |
 | E2E tests | Playwright |
@@ -78,15 +78,32 @@ Copy your Project URL and anon key from **Settings → API** into `.env`.
 
 In **Authentication → Providers** enable Email/Password. Optional: Google OAuth.
 
-### 3. Set up Ollama on Oracle Cloud (optional, but needed for all AI features)
+### 3. Pick an AI provider (optional, but needed for all AI features)
 
-The full step-by-step is in the section below. Short version:
-- Provision an ARM A1.Flex VM (4 OCPU / 24 GB RAM — free forever tier)
+Two backends are supported. Both implement the same 8 feature functions. Switch with **one env var**.
+
+**Option A — Groq (recommended, free, hosted):**
+- Sign up at [console.groq.com](https://console.groq.com), create an API key
+- In `.env`:
+  ```
+  VITE_AI_PROVIDER=groq
+  VITE_GROQ_API_KEY=gsk_...
+  ```
+- Done. Restart `npm run dev`.
+
+**Option B — Ollama (self-hosted on Oracle Cloud):**
+- Provision an ARM A1.Flex VM (4 OCPU / 24 GB RAM — Oracle free forever tier)
 - Install Ollama, pull `llama3.2` and `llama3.2:1b`
 - Put Nginx in front with API-key header auth + SSL
-- Add the URL + key to `.env`
+- In `.env`:
+  ```
+  VITE_AI_PROVIDER=ollama
+  VITE_OLLAMA_URL=https://<your-public-ip>
+  VITE_OLLAMA_API_KEY=<your-key>
+  ```
+- Full step-by-step in the section below.
 
-The app runs fine without it — AI features just show "AI features unavailable" until you wire it up.
+The app runs fine without either — AI features just show "AI features unavailable" until you wire one up.
 
 ### 4. Run
 
@@ -234,7 +251,9 @@ src/
 ├── contexts/
 │   └── AuthContext.jsx
 ├── services/
-│   ├── ollamaService.js         All 8 text-AI calls; mocks in E2E mode
+│   ├── aiService.js             Provider router (picks ollama or groq)
+│   ├── ollamaService.js         Ollama implementation; mocks in E2E mode
+│   ├── groqService.js           Groq implementation; mocks in E2E mode
 │   ├── geminiService.js         Photo analysis (currently stubbed)
 │   └── openFoodFacts.js         Barcode lookup
 ├── hooks/

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { parseNaturalLanguageFood } from '../../services/ollamaService.js';
+import { parseNaturalLanguageFood } from '../../services/aiService.js';
 
 export default function NLPFoodTab({ meal, onSaveMany }) {
   const [text, setText] = useState('');

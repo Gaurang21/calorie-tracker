@@ -11,12 +11,12 @@ vi.mock('./useProfile.js', () => {
   return { useProfile: () => ({ profile, update }) };
 });
 
-vi.mock('../services/ollamaService.js', () => ({
+vi.mock('../services/aiService.js', () => ({
   testConnection: vi.fn().mockResolvedValue({ ok: true, models: ['llama3.2'] }),
 }));
 
 import { useOllama } from './useOllama.js';
-import { testConnection } from '../services/ollamaService.js';
+import { testConnection } from '../services/aiService.js';
 
 describe('useOllama', () => {
   beforeEach(() => { testConnection.mockClear(); });

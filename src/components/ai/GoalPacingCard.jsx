@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
-import { generateGoalPacingMessage } from '../../services/ollamaService.js';
+import { generateGoalPacingMessage } from '../../services/aiService.js';
 import { GOAL_PACE_DELTA } from '../../utils/calculations.js';
 
 const PACE_LABEL = {

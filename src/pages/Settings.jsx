@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { useProfile } from '../hooks/useProfile.js';
 import { useOllama } from '../hooks/useOllama.js';
-import { testConnection } from '../services/ollamaService.js';
+import { testConnection, provider, providerLabel } from '../services/aiService.js';
 
 const AI_FEATURE_LABELS = {
   weekly_summary: 'Weekly Summary',
@@ -195,33 +195,54 @@ export default function Settings() {
       </section>
 
       <section className="card p-4 space-y-3" data-testid="ai-settings">
-        <div className="font-semibold">AI settings</div>
-        <div>
-          <label className="label">Ollama server URL</label>
-          <input
-            data-testid="ollama-url"
-            className="input"
-            placeholder="https://your-oracle-ip"
-            value={profile.ollama_url || ''}
-            onChange={(e) => update({ ollama_url: e.target.value })}
-          />
+        <div className="flex items-center justify-between">
+          <div className="font-semibold">AI settings</div>
+          <span data-testid="ai-provider" className="chip">
+            Provider: <b className="ml-1">{providerLabel}</b>
+          </span>
         </div>
-        <div>
-          <label className="label">Ollama API key</label>
-          <input
-            data-testid="ollama-key"
-            type="password"
-            className="input"
-            value={profile.ollama_api_key || ''}
-            onChange={(e) => update({ ollama_api_key: e.target.value })}
-          />
+        <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          Switch with <code>VITE_AI_PROVIDER=groq</code> or <code>ollama</code> in <code>.env</code>, then restart the dev server.
         </div>
+
+        {provider === 'ollama' && (
+          <>
+            <div>
+              <label className="label">Ollama server URL</label>
+              <input
+                data-testid="ollama-url"
+                className="input"
+                placeholder="https://your-oracle-ip"
+                value={profile.ollama_url || ''}
+                onChange={(e) => update({ ollama_url: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="label">Ollama API key</label>
+              <input
+                data-testid="ollama-key"
+                type="password"
+                className="input"
+                value={profile.ollama_api_key || ''}
+                onChange={(e) => update({ ollama_api_key: e.target.value })}
+              />
+            </div>
+          </>
+        )}
+        {provider === 'groq' && (
+          <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            Groq key is read from <code>VITE_GROQ_API_KEY</code> in the environment, not from the user profile.
+            Get one at <a className="underline" href="https://console.groq.com" target="_blank" rel="noreferrer">console.groq.com</a>.
+          </div>
+        )}
         <div className="flex items-center gap-3">
           <button
             data-testid="test-connection"
             onClick={async () => {
               setTesting(true);
-              const res = await testConnection({ url: profile.ollama_url, apiKey: profile.ollama_api_key });
+              const res = provider === 'ollama'
+                ? await testConnection({ url: profile.ollama_url, apiKey: profile.ollama_api_key })
+                : await testConnection();
               setConnStatus({ checked: true, ...res });
               setTesting(false);
             }}

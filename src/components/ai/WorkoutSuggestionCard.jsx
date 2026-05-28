@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { generateWorkoutSuggestion } from '../../services/ollamaService.js';
+import { generateWorkoutSuggestion } from '../../services/aiService.js';
 
 export default function WorkoutSuggestionCard({ kind = 'recovery', activityLog, calorieData }) {
   const [message, setMessage] = useState(null);

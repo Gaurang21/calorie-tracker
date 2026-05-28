@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { suggestMeals } from '../../services/ollamaService.js';
+import { suggestMeals } from '../../services/aiService.js';
 
 export default function MealSuggestionsCard({ remainingCalories, macroGaps, recentFoods, onLogMeal }) {
   const [busy, setBusy] = useState(false);

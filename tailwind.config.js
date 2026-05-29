@@ -6,20 +6,24 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#eefcf5',
-          100: '#d6f7e6',
-          200: '#aeefce',
-          300: '#7ce0b1',
-          400: '#48cb90',
-          500: '#22b074',
-          600: '#168d5d',
-          700: '#13704c',
-          800: '#13593e',
-          900: '#114934',
+          50:  '#fff4ec',
+          100: '#ffe2d0',
+          200: '#ffc4a3',
+          300: '#ffa073',
+          400: '#ff8a5e',
+          500: '#FF8A65', // Warm coral/peach
+          600: '#e57652',
+          700: '#cc6044',
+          800: '#ad4e38',
+          900: '#8a3d2c',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['"DM Sans"', '"Nunito"', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        '3xl': '24px',
+        '4xl': '32px',
       },
     },
   },

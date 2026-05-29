@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from '../common/Modal.jsx';
-import { suggestFoodSwap } from '../../services/ollamaService.js';
+import { suggestFoodSwap } from '../../services/aiService.js';
 
 export default function FoodSwapSheet({ open, onClose, food, macroGaps, onSwap }) {
   const [swaps, setSwaps] = useState(null);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { testConnection } from '../services/ollamaService.js';
+import { testConnection } from '../services/aiService.js';
 import { useProfile } from './useProfile.js';
 
 const DEFAULT_FLAGS = {

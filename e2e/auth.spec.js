@@ -4,7 +4,7 @@ test.describe('auth', () => {
   test('unauthenticated visit to / redirects to /login', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/login$/);
-    await expect(page.getByRole('heading', { name: /welcome back/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /track\. eat\. win\./i })).toBeVisible();
   });
 
   test('unauthenticated visit to /log redirects to /login', async ({ page }) => {
@@ -34,7 +34,7 @@ test.describe('auth', () => {
     await page.goto('/login');
     await page.getByLabel('Email').fill('nobody@example.com');
     await page.getByLabel('Password').fill('wrongpass');
-    await page.getByRole('button', { name: /^sign in$/i }).click();
+    await page.getByRole('button', { name: /sign in/i }).first().click();
     // Placeholder Supabase URL will fail the request; auth-error should appear.
     await expect(page.getByTestId('auth-error')).toBeVisible({ timeout: 15000 });
   });

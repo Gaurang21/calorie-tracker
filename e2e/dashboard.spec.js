@@ -7,7 +7,7 @@ test.describe('dashboard', () => {
     await expect(page.getByText(/Alex/)).toBeVisible();
     await expect(page.getByText(/kcal left/i).first()).toBeVisible();
     await expect(page.getByText('Macros')).toBeVisible();
-    await expect(page.getByText('Water')).toBeVisible();
+    await expect(page.getByText('Hydration')).toBeVisible();
     await expect(page.getByText('Net calories')).toBeVisible();
   });
 

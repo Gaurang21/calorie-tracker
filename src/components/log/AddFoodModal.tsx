@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import Modal from '../common/Modal';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import ManualEntryTab from './ManualEntryTab';
 import PhotoUploadTab from './PhotoUploadTab';
 import BarcodeScannerTab from './BarcodeScannerTab';
@@ -38,24 +44,34 @@ export default function AddFoodModal({ open, onClose, meal, onAddEntry, onAddEnt
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={`Add to ${meal}`}>
-      <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            data-testid={`tab-${t.id}`}
-            onClick={() => setTab(t.id)}
-            className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap ${tab === t.id ? 'bg-brand-500 text-white' : 'btn-secondary'}`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-      {tab === 'nlp' && <NLPFoodTab meal={meal} onSaveMany={handleSaveMany} />}
-      {tab === 'manual' && <ManualEntryTab meal={meal} onSave={handleSave} />}
-      {tab === 'photo' && <PhotoUploadTab meal={meal} onSave={handleSave} />}
-      {tab === 'barcode' && <BarcodeScannerTab meal={meal} onSave={handleSave} />}
-      {tab === 'templates' && <MealTemplatesTab meal={meal} onSaveMany={handleSaveMany} />}
-    </Modal>
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add to {meal}</DialogTitle>
+        </DialogHeader>
+        <Tabs value={tab} onValueChange={(v) => setTab(v as TabId)} className="w-full">
+          <TabsList className="w-full justify-start">
+            {TABS.map((t) => (
+              <TabsTrigger
+                key={t.id}
+                value={t.id}
+                data-testid={`tab-${t.id}`}
+                style={{
+                  backgroundColor: tab === t.id ? 'var(--brand)' : 'var(--surface-2)',
+                  color: tab === t.id ? '#fff' : 'var(--text-soft)',
+                }}
+              >
+                {t.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <TabsContent value="nlp"><NLPFoodTab meal={meal} onSaveMany={handleSaveMany} /></TabsContent>
+          <TabsContent value="manual"><ManualEntryTab meal={meal} onSave={handleSave} /></TabsContent>
+          <TabsContent value="photo"><PhotoUploadTab meal={meal} onSave={handleSave} /></TabsContent>
+          <TabsContent value="barcode"><BarcodeScannerTab meal={meal} onSave={handleSave} /></TabsContent>
+          <TabsContent value="templates"><MealTemplatesTab meal={meal} onSaveMany={handleSaveMany} /></TabsContent>
+        </Tabs>
+      </DialogContent>
+    </Dialog>
   );
 }

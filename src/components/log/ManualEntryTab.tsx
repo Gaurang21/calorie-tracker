@@ -1,6 +1,10 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { Meal, FoodLog, UserFood } from '../../types/db';
 
 interface Props {
@@ -90,10 +94,11 @@ export default function ManualEntryTab({ meal, onSave }: Props) {
   return (
     <form onSubmit={onSubmit} className="space-y-3" noValidate>
       <div className="relative">
-        <label className="label" htmlFor="food-name">Food name</label>
-        <input id="food-name" data-testid="food-name" className="input" value={name} onChange={(e) => setName(e.target.value)} required />
+        <Label htmlFor="food-name">Food name</Label>
+        <Input id="food-name" data-testid="food-name" value={name} onChange={(e) => setName(e.target.value)} required />
         {matches.length > 0 && (
-          <div className="absolute z-10 left-0 right-0 mt-1 card max-h-48 overflow-auto">
+          <div className="absolute z-10 left-0 right-0 mt-1 rounded-2xl max-h-48 overflow-auto"
+            style={{ backgroundColor: 'var(--surface)', boxShadow: '0 4px 24px rgba(120,95,70,0.06)' }}>
             {matches.map((m) => (
               <button key={m.id} type="button" onClick={() => applyMatch(m)} className="w-full text-left px-3 py-2 hover:bg-black/5 dark:hover:bg-white/5 text-sm">
                 <div className="font-medium">{m.name}</div>
@@ -105,34 +110,34 @@ export default function ManualEntryTab({ meal, onSave }: Props) {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="label" htmlFor="calories">Calories</label>
-          <input id="calories" data-testid="calories" type="number" min="0" className="input" value={calories} onChange={(e) => setCalories(e.target.value)} required />
+          <Label htmlFor="calories">Calories</Label>
+          <Input id="calories" data-testid="calories" type="number" min="0" value={calories} onChange={(e) => setCalories(e.target.value)} required />
         </div>
         <div>
-          <label className="label" htmlFor="serving">Serving size</label>
-          <input id="serving" className="input" value={serving} onChange={(e) => setServing(e.target.value)} placeholder="e.g. 1 cup" />
+          <Label htmlFor="serving">Serving size</Label>
+          <Input id="serving" value={serving} onChange={(e) => setServing(e.target.value)} placeholder="e.g. 1 cup" />
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="label" htmlFor="protein">Protein (g)</label>
-          <input id="protein" type="number" min="0" step="0.1" className="input" value={protein} onChange={(e) => setProtein(e.target.value)} />
+          <Label htmlFor="protein">Protein (g)</Label>
+          <Input id="protein" type="number" min="0" step="0.1" value={protein} onChange={(e) => setProtein(e.target.value)} />
         </div>
         <div>
-          <label className="label" htmlFor="carbs">Carbs (g)</label>
-          <input id="carbs" type="number" min="0" step="0.1" className="input" value={carbs} onChange={(e) => setCarbs(e.target.value)} />
+          <Label htmlFor="carbs">Carbs (g)</Label>
+          <Input id="carbs" type="number" min="0" step="0.1" value={carbs} onChange={(e) => setCarbs(e.target.value)} />
         </div>
         <div>
-          <label className="label" htmlFor="fat">Fat (g)</label>
-          <input id="fat" type="number" min="0" step="0.1" className="input" value={fat} onChange={(e) => setFat(e.target.value)} />
+          <Label htmlFor="fat">Fat (g)</Label>
+          <Input id="fat" type="number" min="0" step="0.1" value={fat} onChange={(e) => setFat(e.target.value)} />
         </div>
       </div>
-      <label className="flex items-center gap-2 text-sm">
-        <input type="checkbox" checked={saveToFoods} onChange={(e) => setSaveToFoods(e.target.checked)} />
+      <label className="flex items-center gap-2 text-sm cursor-pointer">
+        <Checkbox checked={saveToFoods} onCheckedChange={(v) => setSaveToFoods(v === true)} />
         Save to My Foods
       </label>
       {error && <div data-testid="form-error" className="text-sm" style={{ color: 'var(--danger)' }}>{error}</div>}
-      <button disabled={busy} className="btn-primary w-full">{busy ? 'Saving…' : 'Save'}</button>
+      <Button type="submit" disabled={busy} className="w-full">{busy ? 'Saving…' : 'Save'}</Button>
     </form>
   );
 }

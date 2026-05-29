@@ -4,6 +4,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { useProfile } from '../hooks/useProfile';
 import { useOllama } from '../hooks/useOllama';
 import { testConnection, provider, providerLabel } from '../services/aiService';
+import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import type { UserFood, Units, AIFeatureFlags } from '../types/db';
 
 type AIFeatureKey = keyof Required<AIFeatureFlags>;
@@ -144,13 +148,12 @@ export default function Settings() {
 
       <section className="card p-4 space-y-3">
         <div className="font-semibold">Appearance</div>
-        <label className="flex items-center justify-between">
+        <label className="flex items-center justify-between cursor-pointer">
           <span>Dark mode</span>
-          <input
+          <Switch
             data-testid="dark-mode-toggle"
-            type="checkbox"
             checked={!!profile.dark_mode}
-            onChange={toggleDark}
+            onCheckedChange={() => toggleDark()}
           />
         </label>
         <div>
@@ -272,13 +275,12 @@ export default function Settings() {
           <div className="text-sm font-medium mb-2">AI features</div>
           <div className="space-y-2">
             {Object.entries(AI_FEATURE_LABELS).map(([key, label]) => (
-              <label key={key} className="flex items-center justify-between text-sm">
+              <label key={key} className="flex items-center justify-between text-sm cursor-pointer">
                 <span>{label}</span>
-                <input
-                  type="checkbox"
+                <Switch
                   data-testid={`flag-${key}`}
-                  checked={flags[key] !== false}
-                  onChange={(e) => setFlag(key, e.target.checked)}
+                  checked={flags[key as keyof typeof flags] !== false}
+                  onCheckedChange={(v) => setFlag(key as keyof typeof flags, v)}
                 />
               </label>
             ))}

@@ -5,6 +5,7 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -25,7 +26,11 @@
     "noUncheckedIndexedAccess": false,
 
     /* Types */
-    "types": ["vite/client", "node", "@testing-library/jest-dom"]
+    "types": ["vite/client", "node", "@testing-library/jest-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src", "e2e", "screenshots", "vite.config.ts"],
   "exclude": ["node_modules", "dist", "playwright-report", "test-results"]

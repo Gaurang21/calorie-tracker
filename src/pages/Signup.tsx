@@ -1,6 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
 
 export default function Signup() {
   const { signUp, signInWithGoogle } = useAuth();
@@ -28,29 +32,33 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-sm card p-6">
-        <h1 className="text-xl font-bold mb-1">Create your account</h1>
-        <p className="text-sm mb-5" style={{ color: 'var(--text-muted)' }}>Track calories, macros, water, and activity.</p>
-        <form onSubmit={onSubmit} className="space-y-3" noValidate>
-          <div>
-            <label className="label" htmlFor="email">Email</label>
-            <input id="email" type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div>
-            <label className="label" htmlFor="password">Password</label>
-            <input id="password" type="password" required autoComplete="new-password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <div>
-            <label className="label" htmlFor="confirm">Confirm password</label>
-            <input id="confirm" type="password" required autoComplete="new-password" className="input" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
-          </div>
-          {error && <div data-testid="auth-error" className="text-sm" style={{ color: 'var(--danger)' }}>{error}</div>}
-          <button disabled={busy} className="btn-primary w-full">{busy ? 'Creating account…' : 'Create account'}</button>
-        </form>
-        <button onClick={signInWithGoogle} className="btn-secondary w-full mt-3">Continue with Google</button>
-        <div className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>
-          Already have an account? <Link to="/login" className="text-brand-600 hover:underline">Sign in</Link>
+    <div className="min-h-screen flex items-center justify-center p-4 warm-bg">
+      <div className="w-full max-w-sm">
+        <div className="mb-6 text-center">
+          <h1 className="text-xl font-bold mb-1">Create your account</h1>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Track calories, macros, water, and activity.</p>
+        </div>
+        <Card className="p-7" style={{ borderRadius: '32px' }}>
+          <form onSubmit={onSubmit} className="space-y-3.5" noValidate>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" required autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="confirm">Confirm password</Label>
+              <Input id="confirm" type="password" required autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+            </div>
+            {error && <div data-testid="auth-error" className="text-sm" style={{ color: 'var(--danger)' }}>{error}</div>}
+            <Button type="submit" disabled={busy} className="w-full">{busy ? 'Creating account…' : 'Create account'}</Button>
+          </form>
+          <Button variant="secondary" onClick={signInWithGoogle} className="w-full mt-3">Continue with Google</Button>
+        </Card>
+        <div className="mt-5 text-sm text-center" style={{ color: 'var(--text-muted)' }}>
+          Already have an account? <Link to="/login" className="font-medium" style={{ color: 'var(--brand)' }}>Sign in</Link>
         </div>
       </div>
     </div>

@@ -1,5 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import Modal from '../common/Modal';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { MET_VALUES, metCalories } from '../../utils/calculations';
 import type { ActivityLog } from '../../types/db';
 
@@ -95,36 +98,41 @@ export default function ActivityLogSection({ entries, onAdd, onDelete, weightKg 
         </div>
       )}
 
-      <Modal open={open} onClose={() => setOpen(false)} title="Log activity">
-        <form onSubmit={submit} className="space-y-3">
-          <div className="grid grid-cols-2 gap-2">
-            {ACTIVITIES.map((a) => (
-              <button
-                key={a.id}
-                type="button"
-                onClick={() => onSelectActivity(a)}
-                className={`p-2 rounded-xl border text-sm transition ${activity.id === a.id ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/30' : ''}`}
-                style={{ borderColor: activity.id === a.id ? 'var(--brand)' : 'var(--border)' }}
-              >
-                {a.label}
-              </button>
-            ))}
-          </div>
-          <div>
-            <label className="label">Duration (mins)</label>
-            <input data-testid="duration" type="number" min="0" className="input" value={duration} onChange={onDurationChange} />
-          </div>
-          <div>
-            <label className="label">Calories burned</label>
-            <input data-testid="calories-burned" type="number" min="0" className="input" value={calories} onChange={onCaloriesChange} required />
-          </div>
-          <div>
-            <label className="label">Notes</label>
-            <input className="input" value={notes} onChange={(e) => setNotes(e.target.value)} />
-          </div>
-          <button className="btn-primary w-full">Save</button>
-        </form>
-      </Modal>
+      <Dialog open={open} onOpenChange={(o) => !o && setOpen(false)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Log activity</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={submit} className="space-y-3">
+            <div className="grid grid-cols-2 gap-2">
+              {ACTIVITIES.map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => onSelectActivity(a)}
+                  className="p-2 rounded-xl border text-sm transition"
+                  style={{ borderColor: activity.id === a.id ? 'var(--brand)' : 'var(--border)', backgroundColor: activity.id === a.id ? 'var(--brand-soft)' : 'transparent' }}
+                >
+                  {a.label}
+                </button>
+              ))}
+            </div>
+            <div>
+              <Label htmlFor="duration">Duration (mins)</Label>
+              <Input id="duration" data-testid="duration" type="number" min="0" value={duration} onChange={onDurationChange} />
+            </div>
+            <div>
+              <Label htmlFor="calories-burned">Calories burned</Label>
+              <Input id="calories-burned" data-testid="calories-burned" type="number" min="0" value={calories} onChange={onCaloriesChange} required />
+            </div>
+            <div>
+              <Label htmlFor="notes">Notes</Label>
+              <Input id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} />
+            </div>
+            <Button type="submit" className="w-full">Save</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

@@ -71,6 +71,10 @@ body {
     background: linear-gradient(135deg, #FFE2D0 0%, #FFF4EC 100%);
     @apply rounded-3xl;
   }
+  .dark .card-warm {
+    background: linear-gradient(135deg, #3A2B22 0%, #2B2520 100%);
+    border: 1px solid rgba(255,138,101,0.12);
+  }
   .btn {
     @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-[15px] font-medium transition disabled:opacity-50 disabled:cursor-not-allowed;
   }

@@ -16,7 +16,7 @@ export default function Sidebar() {
   const nav = useNavigate();
   const handleSignOut = async () => { await signOut(); nav('/login'); };
   return (
-    <aside className="hidden md:flex md:flex-col w-64 shrink-0 h-screen sticky top-0" style={{ backgroundColor: 'var(--bg)' }}>
+    <aside className="hidden md:flex md:flex-col w-64 shrink-0 h-screen sticky top-0" style={{ backgroundColor: 'var(--bg)', borderRight: '1px solid var(--hairline)' }}>
       <div className="px-6 pt-7 pb-8 flex items-center gap-3">
         <div className="h-10 w-10 rounded-3xl grid place-items-center text-white"
           style={{ background: 'linear-gradient(135deg, #FF8A65, #A8C5A0)', boxShadow: '0 8px 22px var(--brand-glow)' }}>

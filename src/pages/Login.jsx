@@ -29,7 +29,7 @@ export default function Login() {
             style={{ background: 'linear-gradient(135deg, #FF8A65, #A8C5A0)', boxShadow: '0 12px 32px var(--brand-glow)' }}>
             <Sun size={26} strokeWidth={2.2} />
           </div>
-          <h1 className="text-[28px] font-bold tracking-tight">Welcome back</h1>
+          <h1 className="text-[26px] font-bold tracking-widest uppercase">TRACK. EAT. WIN.</h1>
           <p className="text-[14px] mt-2 italic" style={{ color: 'var(--text-muted)' }}>
             ready when you are.
           </p>

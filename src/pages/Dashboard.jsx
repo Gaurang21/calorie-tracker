@@ -91,63 +91,82 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-5">
-      <header className="flex items-center justify-between">
+    <div className="space-y-3">
+      <header className="flex items-end justify-between mb-2">
         <div>
-          <div className="text-2xl font-bold">{greeting()}, {profile?.name || 'friend'} 👋</div>
-          <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Here's your day at a glance.</div>
+          <div className="eyebrow mb-1">{new Date().toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</div>
+          <h1 className="text-[18px] font-medium tracking-tight">{greeting()}, {profile?.name || 'friend'}</h1>
         </div>
-        {streak > 0 && (
-          <div className="chip">🔥 {streak} day streak</div>
-        )}
+        {streak > 0 && (<div className="chip">{streak}d streak</div>)}
       </header>
 
-      <section className="card p-5">
-        <CalorieRing eaten={totals.calories} target={calorieTarget} burned={totalBurned} />
-        <div className="grid grid-cols-3 mt-4 text-center">
-          <div>
-            <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Eaten</div>
-            <div className="font-semibold">{totals.calories}</div>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Burned</div>
-            <div className="font-semibold">{totalBurned}</div>
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Goal</div>
-            <div className="font-semibold">{calorieTarget}</div>
-          </div>
-        </div>
-      </section>
-
-      <section className="card p-5">
-        <div className="font-semibold mb-3">Macros</div>
-        <div className="space-y-3">
-          <ProgressBar label="Protein" value={Math.round(totals.protein_g)} max={macros.protein_g} right={`${Math.round(totals.protein_g)}g / ${macros.protein_g}g`} color="#3b82f6" />
-          <ProgressBar label="Carbs" value={Math.round(totals.carbs_g)} max={macros.carbs_g} right={`${Math.round(totals.carbs_g)}g / ${macros.carbs_g}g`} color="#f59e0b" />
-          <ProgressBar label="Fat" value={Math.round(totals.fat_g)} max={macros.fat_g} right={`${Math.round(totals.fat_g)}g / ${macros.fat_g}g`} color="#ef4444" />
-        </div>
-      </section>
-
-      <section className="card p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div className="font-semibold">Water</div>
-          <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{amountMl}ml / {waterTarget}ml</div>
-        </div>
-        <ProgressBar label="" value={amountMl} max={waterTarget} right={`${Math.round((amountMl / waterTarget) * 100)}%`} color="#0ea5e9" />
-        <div className="grid grid-cols-4 gap-2 mt-3">
-          {[250, 500, 750].map((ml) => (
-            <button key={ml} onClick={() => add(ml)} className="btn-secondary text-sm">+{ml}ml</button>
+      {/* Stats strip */}
+      <section className="card divide-y" style={{ borderColor: 'var(--border)' }}>
+        <div className="grid grid-cols-5">
+          {[
+            { l: 'Eaten', v: totals.calories },
+            { l: 'Burned', v: totalBurned },
+            { l: 'Net', v: net },
+            { l: 'Protein', v: `${Math.round(totals.protein_g)}g` },
+            { l: 'Water', v: `${(amountMl/1000).toFixed(1)}L` },
+          ].map((s, i) => (
+            <div key={i} className="px-3 py-2.5 border-r last:border-r-0" style={{ borderColor: 'var(--border)' }}>
+              <div className="eyebrow mb-1">{s.l}</div>
+              <div className="text-[15px] mono font-medium" style={{ color: 'var(--text)' }}>{s.v}</div>
+            </div>
           ))}
-          <button onClick={() => add(-250)} className="btn-secondary text-sm">−250ml</button>
         </div>
       </section>
 
-      <section className={`card p-5 ${netOk ? '' : 'border-amber-400'}`}>
-        <div className="font-semibold mb-2">Net calories</div>
-        <div className="text-3xl font-bold">{net}</div>
-        <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
-          Goal {calorieTarget} {netOk ? '✅' : netGoalDiff > 0 ? '⚠️ over' : '⚠️ under'}
+      <section className="card p-4">
+        <CalorieRing eaten={totals.calories} target={calorieTarget} burned={totalBurned} />
+        <div className="hairline mt-4" />
+        <div className="grid grid-cols-3 mt-3 text-center">
+          {[['Eaten', totals.calories], ['Burned', totalBurned], ['Goal', calorieTarget]].map(([l,v]) => (
+            <div key={l}>
+              <div className="eyebrow mb-1">{l}</div>
+              <div className="text-[14px] mono font-medium">{v}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="card p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-[13px] font-medium">Macros</h2>
+          <div className="eyebrow">Nutrition</div>
+        </div>
+        <div className="space-y-3">
+          <ProgressBar label="Protein" value={Math.round(totals.protein_g)} max={macros.protein_g} right={`${Math.round(totals.protein_g)} / ${macros.protein_g} g`} color="var(--brand)" />
+          <ProgressBar label="Carbs" value={Math.round(totals.carbs_g)} max={macros.carbs_g} right={`${Math.round(totals.carbs_g)} / ${macros.carbs_g} g`} color="var(--text-muted)" />
+          <ProgressBar label="Fat" value={Math.round(totals.fat_g)} max={macros.fat_g} right={`${Math.round(totals.fat_g)} / ${macros.fat_g} g`} color="var(--text-muted)" />
+        </div>
+      </section>
+
+      <section className="card p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-[13px] font-medium">Water</h2>
+          <div className="text-[11px] mono" style={{ color: 'var(--text-muted)' }}>{amountMl} / {waterTarget} ml</div>
+        </div>
+        <ProgressBar value={amountMl} max={waterTarget} right={`${Math.round((amountMl/waterTarget)*100)}%`} color="var(--brand)" />
+        <div className="grid grid-cols-4 gap-1.5 mt-3">
+          {[250, 500, 750].map((ml) => (
+            <button key={ml} onClick={() => add(ml)} className="btn-secondary mono">+{ml}</button>
+          ))}
+          <button onClick={() => add(-250)} className="btn-secondary mono">−250</button>
+        </div>
+      </section>
+
+      <section className="card p-4">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="eyebrow mb-1.5">Net calories</div>
+            <div className="hero-num text-[28px]">{net}</div>
+            <div className="text-[11px] mono mt-1" style={{ color: 'var(--text-muted)' }}>goal {calorieTarget}</div>
+          </div>
+          <span className="chip" style={netOk ? { color: 'var(--brand)', backgroundColor: 'var(--brand-soft)', borderColor: 'transparent' } : { color: 'var(--warning)', borderColor: 'var(--warning)', backgroundColor: 'transparent' }}>
+            {netOk ? 'ok' : netGoalDiff > 0 ? 'over' : 'under'}
+          </span>
         </div>
       </section>
 
@@ -196,9 +215,10 @@ export default function Dashboard() {
 
       <button
         onClick={() => nav('/log')}
-        className="fixed bottom-20 md:bottom-6 right-4 md:right-8 z-30 btn-primary shadow-lg rounded-full px-5 py-3"
+        className="fixed bottom-20 md:bottom-6 right-4 md:right-8 z-30 btn-primary"
       >
-        <span className="text-lg">＋</span> Log food
+        + Log food
+        <span className="mono text-[10px] opacity-70 ml-1 px-1 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>⌘N</span>
       </button>
     </div>
   );

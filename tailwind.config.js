@@ -6,20 +6,24 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#eefcf5',
-          100: '#d6f7e6',
-          200: '#aeefce',
-          300: '#7ce0b1',
-          400: '#48cb90',
-          500: '#22b074',
-          600: '#168d5d',
-          700: '#13704c',
-          800: '#13593e',
-          900: '#114934',
+          50:  '#f4eefe',
+          100: '#e5d4fb',
+          200: '#caa8f7',
+          300: '#a875ee',
+          400: '#9148e6',
+          500: '#7c3aed', // Violet — Linear-style
+          600: '#6829c7',
+          700: '#54219f',
+          800: '#421a7c',
+          900: '#321660',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['"Inter Variable"', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+      },
+      letterSpacing: {
+        tightest: '-0.04em',
       },
     },
   },

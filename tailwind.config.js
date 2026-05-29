@@ -6,20 +6,21 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#eefcf5',
-          100: '#d6f7e6',
-          200: '#aeefce',
-          300: '#7ce0b1',
-          400: '#48cb90',
-          500: '#22b074',
-          600: '#168d5d',
-          700: '#13704c',
-          800: '#13593e',
-          900: '#114934',
+          50:  '#fff2ec',
+          100: '#ffe0d0',
+          200: '#ffbe97',
+          300: '#ff9c5e',
+          400: '#ff7a35',
+          500: '#FF5A1F', // Electric orange
+          600: '#e54e1a',
+          700: '#b83d14',
+          800: '#902f10',
+          900: '#6a220b',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Bebas Neue"', 'Oswald', 'system-ui', 'sans-serif'],
       },
     },
   },

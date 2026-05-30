@@ -4,6 +4,8 @@ import FoodSwapSheet from '../ai/FoodSwapSheet';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { useOllama } from '../../hooks/useOllama';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import type { Meal, FoodLog } from '../../types/db';
 import type { MacroGaps } from '../../types/ai';
 
@@ -47,7 +49,7 @@ export default function FoodLogSection({ meal, entries, onAddEntry, onAddEntries
   };
 
   return (
-    <section className="card p-4" data-testid={`meal-${meal}`}>
+    <Card className="p-4" data-testid={`meal-${meal}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="font-semibold">{MEAL_LABELS[meal]}</div>
         <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{total} kcal</div>
@@ -81,9 +83,9 @@ export default function FoodLogSection({ meal, entries, onAddEntry, onAddEntries
         ))}
       </div>
       <div className="flex gap-2 mt-3">
-        <button data-testid={`add-${meal}`} onClick={() => setOpen(true)} className="btn-secondary text-sm flex-1">+ Add food</button>
+        <Button data-testid={`add-${meal}`} variant="secondary" size="sm" className="flex-1" onClick={() => setOpen(true)}>+ Add food</Button>
         {entries.length > 0 && (
-          <button onClick={saveAsTemplate} className="btn-ghost text-sm">Save as template</button>
+          <Button variant="ghost" size="sm" onClick={saveAsTemplate}>Save as template</Button>
         )}
       </div>
       <AddFoodModal
@@ -113,6 +115,6 @@ export default function FoodLogSection({ meal, entries, onAddEntry, onAddEntries
           setSwapFood(null);
         }}
       />
-    </section>
+    </Card>
   );
 }

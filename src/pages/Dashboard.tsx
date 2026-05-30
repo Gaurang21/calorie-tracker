@@ -16,6 +16,8 @@ import DailyInsightCard from '../components/ai/DailyInsightCard';
 import GoalPacingCard from '../components/ai/GoalPacingCard';
 import MealSuggestionsCard from '../components/ai/MealSuggestionsCard';
 import WorkoutSuggestionCard from '../components/ai/WorkoutSuggestionCard';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import type { ActivityLogContext } from '../types/ai';
 import type { MealSuggestion } from '../types/ai';
 
@@ -106,7 +108,7 @@ export default function Dashboard() {
         {streak > 0 && (<div className="chip chip-brand">🔥 {streak} day streak</div>)}
       </header>
 
-      <section className="card-warm p-6">
+      <Card variant="warm" className="p-6">
         <CalorieRing eaten={totals.calories} target={calorieTarget} burned={totalBurned} />
         <div className="grid grid-cols-3 mt-5 text-center">
           {[['eaten', totals.calories], ['burned', totalBurned], ['goal', calorieTarget]].map(([l,v]) => (
@@ -116,18 +118,18 @@ export default function Dashboard() {
             </div>
           ))}
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-6">
+      <Card className="p-6">
         <div className="font-semibold mb-4">Today's macros 🌱</div>
         <div className="space-y-3.5">
           <ProgressBar label="Protein" value={Math.round(totals.protein_g)} max={macros.protein_g} right={`${Math.round(totals.protein_g)}g / ${macros.protein_g}g`} color="var(--sky)" />
           <ProgressBar label="Carbs" value={Math.round(totals.carbs_g)} max={macros.carbs_g} right={`${Math.round(totals.carbs_g)}g / ${macros.carbs_g}g`} color="var(--amber)" />
           <ProgressBar label="Fat" value={Math.round(totals.fat_g)} max={macros.fat_g} right={`${Math.round(totals.fat_g)}g / ${macros.fat_g}g`} color="var(--ruby)" />
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-6">
+      <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="font-semibold">Hydration 💧</div>
           <div className="text-[13px] tabular" style={{ color: 'var(--text-muted)' }}>{amountMl} / {waterTarget} ml</div>
@@ -135,13 +137,13 @@ export default function Dashboard() {
         <ProgressBar value={amountMl} max={waterTarget} right={`${Math.round((amountMl/waterTarget)*100)}%`} color="var(--sky)" />
         <div className="grid grid-cols-4 gap-2 mt-4">
           {[250, 500, 750].map((ml) => (
-            <button key={ml} onClick={() => add(ml)} className="btn-secondary text-[13px]">+{ml}ml</button>
+            <Button key={ml} variant="secondary" size="sm" onClick={() => add(ml)}>+{ml}ml</Button>
           ))}
-          <button onClick={() => add(-250)} className="btn-secondary text-[13px]">−250ml</button>
+          <Button variant="secondary" size="sm" onClick={() => add(-250)}>−250ml</Button>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-6">
+      <Card className="p-6">
         <div className="flex items-start justify-between">
           <div>
             <div className="text-[12px] uppercase font-semibold tracking-wide mb-2" style={{ color: 'var(--text-muted)' }}>Net calories</div>
@@ -152,7 +154,7 @@ export default function Dashboard() {
             {netOk ? '✓ on track' : netGoalDiff > 0 ? 'a bit over' : 'still room'}
           </span>
         </div>
-      </section>
+      </Card>
 
       {enabled('daily_insights') && (
         <DailyInsightCard
@@ -197,12 +199,12 @@ export default function Dashboard() {
         />
       )}
 
-      <button
+      <Button
         onClick={() => nav('/log')}
-        className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-30 btn-primary px-6 py-3.5 text-[15px]"
+        className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-30 px-6 py-3.5 text-[15px]"
       >
         <span className="text-lg leading-none">＋</span> Log food
-      </button>
+      </Button>
     </div>
   );
 }

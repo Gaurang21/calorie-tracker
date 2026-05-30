@@ -11,7 +11,8 @@ test('trends page loads with all chart cards and date range filter', async ({ pa
   await expect(page.getByText('Net calories')).toBeVisible();
   await expect(page.getByText('Goal projection')).toBeVisible();
 
-  // Date range filter
-  await page.locator('select').selectOption('7');
-  await expect(page.locator('select')).toHaveValue('7');
+  // Date range filter (shadcn Select — click trigger, pick item from dropdown)
+  await page.getByRole('combobox').click();
+  await page.getByRole('option', { name: '7 days' }).click();
+  await expect(page.getByRole('combobox')).toHaveText('7 days');
 });

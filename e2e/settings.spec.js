@@ -14,7 +14,7 @@ test('units toggle switches between metric and imperial', async ({ page }) => {
   await page.goto('/settings');
   await page.getByTestId('units-imperial').click();
   await page.reload();
-  await expect(page.getByTestId('units-imperial')).toHaveClass(/bg-brand-500/);
+  await expect(page.getByTestId('units-imperial')).toHaveClass(/shadow-\[0_6px_18px/);
 });
 
 test('Gemini API key field accepts input', async ({ page }) => {

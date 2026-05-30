@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { suggestMeals } from '../../services/aiService';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import type { MacroGaps, MealSuggestion } from '../../types/ai';
 
 interface Props {
@@ -30,7 +32,7 @@ export default function MealSuggestionsCard({ remainingCalories, macroGaps, rece
   };
 
   return (
-    <section className="card p-4" data-testid="meal-suggestions">
+    <Card className="p-4" data-testid="meal-suggestions">
       <div className="flex items-center justify-between">
         <div className="font-semibold">🍽️ What should I eat next?</div>
         {suggestions && (
@@ -44,9 +46,9 @@ export default function MealSuggestionsCard({ remainingCalories, macroGaps, rece
       </div>
 
       {!suggestions && (
-        <button onClick={fetchSuggestions} disabled={busy} className="btn-primary w-full mt-3" data-testid="meal-suggest-btn">
+        <Button onClick={fetchSuggestions} disabled={busy} className="w-full mt-3" data-testid="meal-suggest-btn">
           {busy ? 'Finding meals that fit…' : 'Suggest a meal'}
-        </button>
+        </Button>
       )}
 
       {suggestions && (
@@ -61,13 +63,13 @@ export default function MealSuggestionsCard({ remainingCalories, macroGaps, rece
                     {s.calories} kcal · P{s.protein_g} C{s.carbs_g} F{s.fat_g}
                   </div>
                 </div>
-                <button onClick={() => onLogMeal?.(s)} className="btn-secondary text-xs">Log this</button>
+                <Button variant="secondary" size="sm" onClick={() => onLogMeal?.(s)}>Log this</Button>
               </div>
             </div>
           ))}
         </div>
       )}
       {error && <div className="text-xs mt-2" style={{ color: 'var(--danger)' }}>{error}</div>}
-    </section>
+    </Card>
   );
 }

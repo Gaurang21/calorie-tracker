@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useProfile } from '../hooks/useProfile';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
 import type { Sex, ActivityLevel, GoalPace, Units } from '../types/db';
 
 interface OnboardingData {
@@ -85,7 +89,7 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md card p-6">
+      <Card className="w-full max-w-md p-6">
         <div className="mb-4">
           <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Step {step} of 4</div>
           <div className="h-1.5 mt-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--surface-2)' }}>
@@ -97,27 +101,27 @@ export default function Onboarding() {
           <div className="space-y-3">
             <h2 className="text-xl font-bold">Tell us about yourself</h2>
             <div>
-              <label className="label" htmlFor="ob-name">Name</label>
-              <input id="ob-name" className="input" value={data.name} onChange={set('name')} />
+              <Label htmlFor="ob-name">Name</Label>
+              <Input id="ob-name" value={data.name} onChange={set('name')} />
             </div>
             <div>
-              <label className="label">Sex</label>
+              <Label>Sex</Label>
               <div className="grid grid-cols-2 gap-2">
                 {['male', 'female'].map((s) => (
-                  <button
+                  <Button
                     key={s}
                     type="button"
+                    variant={data.sex === s ? 'default' : 'secondary'}
                     onClick={() => setData((d) => ({ ...d, sex: s as Sex }))}
-                    className={`btn ${data.sex === s ? 'bg-brand-500 text-white' : 'btn-secondary'}`}
                   >
                     {s === 'male' ? 'Male' : 'Female'}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
             <div>
-              <label className="label" htmlFor="ob-dob">Date of birth</label>
-              <input id="ob-dob" type="date" className="input" value={data.date_of_birth} onChange={set('date_of_birth')} />
+              <Label htmlFor="ob-dob">Date of birth</Label>
+              <Input id="ob-dob" type="date" value={data.date_of_birth} onChange={set('date_of_birth')} />
             </div>
           </div>
         )}
@@ -126,27 +130,27 @@ export default function Onboarding() {
           <div className="space-y-3">
             <h2 className="text-xl font-bold">Body metrics</h2>
             <div>
-              <label className="label">Units</label>
+              <Label>Units</Label>
               <div className="grid grid-cols-2 gap-2">
                 {['metric', 'imperial'].map((u) => (
-                  <button
+                  <Button
                     key={u}
                     type="button"
+                    variant={data.units === u ? 'default' : 'secondary'}
                     onClick={() => setData((d) => ({ ...d, units: u as Units }))}
-                    className={`btn ${data.units === u ? 'bg-brand-500 text-white' : 'btn-secondary'}`}
                   >
                     {u === 'metric' ? 'Metric (kg / cm)' : 'Imperial (lb / in)'}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
             <div>
-              <label className="label" htmlFor="ob-height">Height (cm)</label>
-              <input id="ob-height" type="number" className="input" value={data.height_cm} onChange={set('height_cm')} />
+              <Label htmlFor="ob-height">Height (cm)</Label>
+              <Input id="ob-height" type="number" value={data.height_cm} onChange={set('height_cm')} />
             </div>
             <div>
-              <label className="label" htmlFor="ob-weight">Current weight (kg)</label>
-              <input id="ob-weight" type="number" step="0.1" className="input" value={data.weight_kg} onChange={set('weight_kg')} />
+              <Label htmlFor="ob-weight">Current weight (kg)</Label>
+              <Input id="ob-weight" type="number" step="0.1" value={data.weight_kg} onChange={set('weight_kg')} />
             </div>
           </div>
         )}
@@ -175,11 +179,11 @@ export default function Onboarding() {
           <div className="space-y-3">
             <h2 className="text-xl font-bold">Your goal</h2>
             <div>
-              <label className="label" htmlFor="ob-target-weight">Target weight (kg)</label>
-              <input id="ob-target-weight" type="number" step="0.1" className="input" value={data.goal_weight_kg} onChange={set('goal_weight_kg')} />
+              <Label htmlFor="ob-target-weight">Target weight (kg)</Label>
+              <Input id="ob-target-weight" type="number" step="0.1" value={data.goal_weight_kg} onChange={set('goal_weight_kg')} />
             </div>
             <div>
-              <label className="label">Pace</label>
+              <Label>Pace</Label>
               <div className="space-y-2">
                 {PACE_OPTIONS.map((o) => (
                   <button
@@ -200,30 +204,29 @@ export default function Onboarding() {
         )}
 
         <div className="flex justify-between mt-6">
-          <button
+          <Button
             type="button"
+            variant="secondary"
             disabled={step === 1}
             onClick={() => setStep((s) => Math.max(1, s - 1))}
-            className="btn-secondary"
           >
             Back
-          </button>
+          </Button>
           {step < 4 ? (
-            <button
+            <Button
               type="button"
               disabled={!canNext()}
               onClick={() => setStep((s) => s + 1)}
-              className="btn-primary"
             >
               Next
-            </button>
+            </Button>
           ) : (
-            <button type="button" disabled={!canNext()} onClick={finish} className="btn-primary">
+            <Button type="button" disabled={!canNext()} onClick={finish}>
               Finish
-            </button>
+            </Button>
           )}
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

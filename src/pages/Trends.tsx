@@ -7,6 +7,8 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useProfile } from '../hooks/useProfile';
 import { useDailyTargets } from '../hooks/useDailyTargets';
+import { Card } from '@/components/ui/card';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import type { ISODate } from '../types/db';
 
 type SeriesRow = { date: string } & Record<string, string | number | null>;
@@ -109,12 +111,17 @@ export default function Trends() {
     <div className="space-y-5">
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Trends</h1>
-        <select className="input max-w-[140px]" value={days} onChange={(e) => setDays(Number(e.target.value))}>
-          {RANGES.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
-        </select>
+        <Select value={String(days)} onValueChange={(v) => setDays(Number(v))}>
+          <SelectTrigger className="max-w-[140px]"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {RANGES.map((r) => (
+              <SelectItem key={r.value} value={String(r.value)}>{r.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </header>
 
-      <section className="card p-4">
+      <Card className="p-4">
         <div className="font-semibold mb-2">Weight history</div>
         <div className="h-56">
           <ResponsiveContainer>
@@ -128,9 +135,9 @@ export default function Trends() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4">
+      <Card className="p-4">
         <div className="font-semibold mb-2">Calories vs target</div>
         <div className="h-56">
           <ResponsiveContainer>
@@ -144,9 +151,9 @@ export default function Trends() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4">
+      <Card className="p-4">
         <div className="font-semibold mb-2">Macro distribution</div>
         <div className="h-56">
           <ResponsiveContainer>
@@ -159,9 +166,9 @@ export default function Trends() {
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4">
+      <Card className="p-4">
         <div className="font-semibold mb-2">Net calories</div>
         <div className="h-56">
           <ResponsiveContainer>
@@ -174,9 +181,9 @@ export default function Trends() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4">
+      <Card className="p-4">
         <div className="font-semibold mb-2">Goal projection</div>
         <div className="h-56">
           <ResponsiveContainer>
@@ -190,7 +197,7 @@ export default function Trends() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </section>
+      </Card>
     </div>
   );
 }

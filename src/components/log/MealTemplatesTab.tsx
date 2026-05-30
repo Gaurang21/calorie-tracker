@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 import type { Meal, MealTemplate, FoodLog } from '../../types/db';
 
 interface Props {
@@ -73,9 +74,9 @@ export default function MealTemplatesTab({ meal, onSaveMany }: Props) {
         </button>
       ))}
       {selected && (
-        <button onClick={logTemplate} disabled={busy} className="btn-primary w-full">
+        <Button onClick={logTemplate} disabled={busy} className="w-full">
           {busy ? 'Logging…' : `Log "${selected.name}" as ${meal}`}
-        </button>
+        </Button>
       )}
     </div>
   );

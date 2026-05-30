@@ -1,35 +1,32 @@
-import { useEffect, useState, type ChangeEvent, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useProfile } from '../hooks/useProfile';
 import { useDailyTargets } from '../hooks/useDailyTargets';
 import { bmi, bmiCategory, bodyFatNavy } from '../utils/calculations';
 import { parseAppleHealthExport } from '../utils/appleHealthParser';
-import type { Profile as ProfileType, Sex, ActivityLevel, GoalPace, WeightLog } from '../types/db';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 
-interface NavyInputs { waistCm: string; neckCm: string; hipCm: string }
-
 export default function Profile() {
   const { user } = useAuth();
   const { profile, update } = useProfile();
   const { bmr, tdee, calorieTarget, currentWeightKg, age } = useDailyTargets(profile);
-  const [draft, setDraft] = useState<ProfileType | null>(null);
-  const [weights, setWeights] = useState<WeightLog[]>([]);
+  const [draft, setDraft] = useState(null);
+  const [weights, setWeights] = useState([]);
   const [newWeight, setNewWeight] = useState('');
   const [newDate, setNewDate] = useState(new Date().toISOString().slice(0, 10));
-  const [navy, setNavy] = useState<NavyInputs>({ waistCm: '', neckCm: '', hipCm: '' });
-  const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [navy, setNavy] = useState({ waistCm: '', neckCm: '', hipCm: '' });
+  const [importStatus, setImportStatus] = useState(null);
 
   useEffect(() => {
     if (profile && !draft) setDraft(profile);
   }, [profile, draft]);
 
-  const loadWeights = async (): Promise<void> => {
+  const loadWeights = async () => {
     if (!user) return;
     const { data } = await supabase
       .from('weight_log')
@@ -37,11 +34,11 @@ export default function Profile() {
       .eq('user_id', user.id)
       .order('date', { ascending: false })
       .limit(60);
-    setWeights((data as WeightLog[]) || []);
+    setWeights(data || []);
   };
   useEffect(() => { loadWeights(); }, [user]); // eslint-disable-line
 
-  const save = async (): Promise<void> => {
+  const save = async () => {
     if (!draft) return;
     await update({
       name: draft.name,
@@ -54,7 +51,7 @@ export default function Profile() {
     });
   };
 
-  const addWeight = async (): Promise<void> => {
+  const addWeight = async () => {
     if (!user || !newWeight) return;
     await supabase.from('weight_log').upsert({
       user_id: user.id,
@@ -65,13 +62,13 @@ export default function Profile() {
     loadWeights();
   };
 
-  const deleteWeight = async (id: string): Promise<void> => {
+  const deleteWeight = async (id) => {
     if (!user) return;
     await supabase.from('weight_log').delete().eq('id', id).eq('user_id', user.id);
     loadWeights();
   };
 
-  const onHealthFile = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+  const onHealthFile = async (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
     setImportStatus('Reading…');
@@ -123,7 +120,7 @@ export default function Profile() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Sex</Label>
-            <Select value={draft.sex || '_none'} onValueChange={(v) => setDraft({ ...draft, sex: (v === '_none' ? null : v) as Sex | null })}>
+            <Select value={draft.sex || '_none'} onValueChange={(v) => setDraft({ ...draft, sex: v === '_none' ? null : v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="_none">—</SelectItem>
@@ -144,7 +141,7 @@ export default function Profile() {
           </div>
           <div>
             <Label>Activity level</Label>
-            <Select value={draft.activity_level || '_none'} onValueChange={(v) => setDraft({ ...draft, activity_level: (v === '_none' ? null : v) as ActivityLevel | null })}>
+            <Select value={draft.activity_level || '_none'} onValueChange={(v) => setDraft({ ...draft, activity_level: v === '_none' ? null : v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="_none">—</SelectItem>
@@ -164,7 +161,7 @@ export default function Profile() {
           </div>
           <div>
             <Label>Pace</Label>
-            <Select value={draft.goal_pace || 'maintain'} onValueChange={(v) => setDraft({ ...draft, goal_pace: v as GoalPace })}>
+            <Select value={draft.goal_pace || 'maintain'} onValueChange={(v) => setDraft({ ...draft, goal_pace: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="lose_1kg">Lose 1 kg/week</SelectItem>
@@ -231,8 +228,7 @@ export default function Profile() {
   );
 }
 
-interface MetricProps { label: string; value: ReactNode }
-function Metric({ label, value }: MetricProps) {
+function Metric({ label, value }) {
   return (
     <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--surface-2)' }}>
       <div className="text-xs uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>{label}</div>

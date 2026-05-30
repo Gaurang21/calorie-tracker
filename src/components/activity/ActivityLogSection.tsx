@@ -78,7 +78,7 @@ export default function ActivityLogSection({ entries, onAdd, onDelete, weightKg 
     <section className="card p-4" data-testid="activity-section">
       <div className="flex items-center justify-between mb-2">
         <div className="font-semibold">🔥 Activity</div>
-        <button data-testid="add-activity" onClick={() => setOpen(true)} className="btn-secondary text-sm">+ Log activity</button>
+        <Button data-testid="add-activity" variant="secondary" size="sm" onClick={() => setOpen(true)}>+ Log activity</Button>
       </div>
       {entries.length === 0 ? (
         <div className="text-sm py-2" style={{ color: 'var(--text-muted)' }}>Nothing logged yet</div>

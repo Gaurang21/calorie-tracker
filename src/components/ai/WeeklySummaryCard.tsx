@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { generateWeeklySummary } from '../../services/aiService';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import type { Profile, ISODate } from '../../types/db';
 import type { WeekData } from '../../types/ai';
 import type { MacroTargets } from '../../utils/calculations';
@@ -113,7 +115,7 @@ export default function WeeklySummaryCard({ profile: _profile, calorieTarget, ma
   }
 
   return (
-    <section className="card p-5" data-testid="weekly-summary">
+    <Card className="p-5" data-testid="weekly-summary">
       <div className="flex items-center justify-between">
         <div className="font-semibold flex items-center gap-2">✨ Your week in review</div>
         <button onClick={() => setCollapsed((c) => !c)} className="text-sm opacity-60 hover:opacity-100">
@@ -135,14 +137,14 @@ export default function WeeklySummaryCard({ profile: _profile, calorieTarget, ma
               <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
                 Get an AI-generated recap of your past week.
               </p>
-              <button onClick={generate} disabled={busy} className="btn-primary w-full" data-testid="weekly-generate">
+              <Button onClick={generate} disabled={busy} className="w-full" data-testid="weekly-generate">
                 {busy ? 'Analyzing your week…' : 'Generate summary'}
-              </button>
+              </Button>
             </>
           )}
           {error && <div className="text-xs" style={{ color: 'var(--danger)' }}>{error}</div>}
         </div>
       )}
-    </section>
+    </Card>
   );
 }

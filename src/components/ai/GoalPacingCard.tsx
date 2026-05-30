@@ -3,6 +3,8 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { generateGoalPacingMessage } from '../../services/aiService';
 import { GOAL_PACE_DELTA } from '../../utils/calculations';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import type { Profile, GoalPace, ISODate } from '../../types/db';
 
 interface Props {
@@ -110,7 +112,7 @@ export default function GoalPacingCard({ profile, calorieTarget }: Props) {
   const label = onTrack ? 'On track' : slightlyOff ? 'Slightly off pace' : 'Off pace';
 
   return (
-    <section className="card p-4" data-testid="goal-pacing">
+    <Card className="p-4" data-testid="goal-pacing">
       <div className="flex items-center justify-between mb-2">
         <div className="font-semibold">🎯 Goal pace</div>
         <span className="chip" style={{ backgroundColor: 'transparent', color, border: `1px solid ${color}` }}>{label}</span>
@@ -121,11 +123,11 @@ export default function GoalPacingCard({ profile, calorieTarget }: Props) {
       {message ? (
         <p className="text-sm mt-2">{message}</p>
       ) : (
-        <button onClick={generate} disabled={busy} className="btn-secondary text-sm mt-2">
+        <Button variant="secondary" size="sm" onClick={generate} disabled={busy} className="mt-2">
           {busy ? 'Coaching…' : 'Get pacing tip'}
-        </button>
+        </Button>
       )}
       {error && <div className="text-xs mt-1" style={{ color: 'var(--danger)' }}>{error}</div>}
-    </section>
+    </Card>
   );
 }

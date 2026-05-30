@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { parseNaturalLanguageFood } from '../../services/aiService';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import type { ParsedFoodItem } from '../../types/ai';
 import type { Meal, FoodLog } from '../../types/db';
 
@@ -59,14 +62,14 @@ export default function NLPFoodTab({ meal, onSaveMany }: Props) {
 
   return (
     <div className="space-y-3">
-      <textarea
+      <Textarea
         data-testid="nlp-input"
-        className="input min-h-[100px]"
+        className="min-h-[100px]"
         placeholder="e.g. I had a bowl of oatmeal with banana and a coffee with oat milk"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <button data-testid="nlp-parse" onClick={parse} disabled={busy || !text.trim()} className="btn-primary w-full">
+      <Button data-testid="nlp-parse" onClick={parse} disabled={busy || !text.trim()} className="w-full">
         {busy ? (
           <span className="flex items-center gap-2">
             <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -75,7 +78,7 @@ export default function NLPFoodTab({ meal, onSaveMany }: Props) {
         ) : (
           '✨ Parse with AI'
         )}
-      </button>
+      </Button>
 
       {error && (
         <div className="card p-3 text-sm" data-testid="nlp-error" style={{ color: 'var(--danger)' }}>
@@ -89,8 +92,8 @@ export default function NLPFoodTab({ meal, onSaveMany }: Props) {
           {items.map((it, i) => (
             <div key={i} className="card p-3 space-y-2">
               <div className="flex items-center justify-between">
-                <input
-                  className="input flex-1"
+                <Input
+                  className="flex-1"
                   value={it.name || ''}
                   onChange={(e) => updateItem(i, { name: e.target.value })}
                 />
@@ -112,9 +115,9 @@ export default function NLPFoodTab({ meal, onSaveMany }: Props) {
           <div className="text-xs italic" style={{ color: 'var(--text-muted)' }}>
             AI estimates — please verify before saving
           </div>
-          <button data-testid="nlp-log-all" onClick={logAll} disabled={logging} className="btn-primary w-full">
+          <Button data-testid="nlp-log-all" onClick={logAll} disabled={logging} className="w-full">
             {logging ? 'Logging…' : `Log All ${items.length} Items`}
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -131,9 +134,8 @@ function Field({ label, value, onChange }: FieldProps) {
   return (
     <div>
       <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</div>
-      <input
+      <Input
         type="number"
-        className="input"
         value={value ?? ''}
         onChange={(e) => onChange(e.target.value)}
       />

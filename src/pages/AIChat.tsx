@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useProfile } from '../hooks/useProfile';
 import { useDailyTargets } from '../hooks/useDailyTargets';
 import { answerDataQuestion } from '../services/aiService';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import type { ISODate } from '../types/db';
 
 interface ChatMessage {
@@ -157,14 +159,14 @@ export default function AIChat() {
       </div>
 
       <form onSubmit={onSubmit} className="flex gap-2 mt-3">
-        <input
+        <Input
           data-testid="chat-input"
-          className="input flex-1"
+          className="flex-1"
           placeholder="Ask anything…"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <button data-testid="chat-send" className="btn-primary" disabled={busy || !input.trim()}>Send</button>
+        <Button data-testid="chat-send" disabled={busy || !input.trim()}>Send</Button>
       </form>
     </div>
   );

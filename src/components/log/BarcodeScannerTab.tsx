@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { lookupBarcode, type BarcodeProduct } from '../../services/openFoodFacts';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
 import type { Meal, FoodLog } from '../../types/db';
 
 interface Props {
@@ -96,22 +99,22 @@ export default function BarcodeScannerTab({ meal, onSave }: Props) {
     <div className="space-y-3">
       <div ref={containerRef} />
       {!scanning && !product && (
-        <button onClick={startScanner} className="btn-primary w-full">📷 Start camera scan</button>
+        <Button onClick={startScanner} className="w-full">📷 Start camera scan</Button>
       )}
       <form onSubmit={onManualSearch} className="flex gap-2">
-        <input className="input" placeholder="Or enter barcode" value={manual} onChange={(e) => setManual(e.target.value)} />
-        <button className="btn-secondary">Look up</button>
+        <Input placeholder="Or enter barcode" value={manual} onChange={(e) => setManual(e.target.value)} />
+        <Button variant="secondary">Look up</Button>
       </form>
       {busy && <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Searching…</div>}
       {error && <div className="text-sm" style={{ color: 'var(--danger)' }}>{error}</div>}
       {product && (
-        <div className="card p-3 space-y-1" data-testid="barcode-product">
+        <Card className="p-3 space-y-1" data-testid="barcode-product">
           <div className="font-semibold">{product.name}</div>
           {product.brand && <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{product.brand}</div>}
           <div className="text-sm">{product.calories} kcal · P {product.protein_g}g · C {product.carbs_g}g · F {product.fat_g}g</div>
           <div className="text-xs" style={{ color: 'var(--text-muted)' }}>per {product.serving_size}</div>
-          <button onClick={addToLog} className="btn-primary w-full mt-2">Add to Log</button>
-        </div>
+          <Button onClick={addToLog} className="w-full mt-2">Add to Log</Button>
+        </Card>
       )}
     </div>
   );

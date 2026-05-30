@@ -9,6 +9,9 @@ import { useActivityLog } from '../hooks/useActivityLog';
 import { useWaterLog } from '../hooks/useWaterLog';
 import { useDailyTargets } from '../hooks/useDailyTargets';
 import { useOllama } from '../hooks/useOllama';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
 import type { Meal } from '../types/db';
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
@@ -37,10 +40,10 @@ export default function Log() {
     <div className="space-y-5">
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Daily log</h1>
-        <input
+        <Input
           type="date"
           data-testid="log-date"
-          className="input max-w-[180px]"
+          className="max-w-[180px]"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
@@ -81,7 +84,7 @@ export default function Log() {
         />
       )}
 
-      <section className="card p-4">
+      <Card className="p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="font-semibold">💧 Water</div>
           <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{amountMl}ml / {waterTarget}ml</div>
@@ -89,13 +92,13 @@ export default function Log() {
         <ProgressBar label="" value={amountMl} max={waterTarget} right={`${Math.round((amountMl / waterTarget) * 100)}%`} color="#0ea5e9" />
         <div className="grid grid-cols-4 gap-2 mt-3">
           {[250, 500, 750].map((ml) => (
-            <button key={ml} onClick={() => addWater(ml)} className="btn-secondary text-sm">+{ml}ml</button>
+            <Button key={ml} variant="secondary" size="sm" onClick={() => addWater(ml)}>+{ml}ml</Button>
           ))}
-          <button onClick={() => addWater(-250)} className="btn-secondary text-sm">−250ml</button>
+          <Button variant="secondary" size="sm" onClick={() => addWater(-250)}>−250ml</Button>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4 font-mono text-sm">
+      <Card className="p-4 font-mono text-sm">
         <div className="flex justify-between"><span>Calories eaten</span><span>{totals.calories} kcal</span></div>
         <div className="flex justify-between"><span>Calories burned</span><span>{totalBurned} kcal</span></div>
         <div className="border-t my-2" style={{ borderColor: 'var(--border)' }} />
@@ -103,7 +106,7 @@ export default function Log() {
           <span>Net calories</span>
           <span data-testid="net-calories">{net} kcal · {netOk ? '✅' : '⚠️'} goal {calorieTarget}</span>
         </div>
-      </section>
+      </Card>
     </div>
   );
 }

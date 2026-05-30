@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
 import type { UserFood, Units, AIFeatureFlags } from '../types/db';
 
 type AIFeatureKey = keyof Required<AIFeatureFlags>;
@@ -146,7 +147,7 @@ export default function Settings() {
     <div className="space-y-5">
       <h1 className="text-xl font-bold">Settings</h1>
 
-      <section className="card p-4 space-y-3">
+      <Card className="p-4 space-y-3">
         <div className="font-semibold">Appearance</div>
         <label className="flex items-center justify-between cursor-pointer">
           <span>Dark mode</span>
@@ -160,26 +161,25 @@ export default function Settings() {
           <div className="label">Units</div>
           <div className="grid grid-cols-2 gap-2">
             {(['metric', 'imperial'] as const).map((u) => (
-              <button
+              <Button
                 key={u}
                 data-testid={`units-${u}`}
+                variant={profile.units === u ? 'default' : 'secondary'}
                 onClick={() => setUnits(u)}
-                className={`btn ${profile.units === u ? 'bg-brand-500 text-white' : 'btn-secondary'}`}
               >
                 {u}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4 space-y-3">
+      <Card className="p-4 space-y-3">
         <div className="font-semibold">Daily targets</div>
         <div>
-          <label className="label">Calorie target override</label>
-          <input
+          <Label>Calorie target override</Label>
+          <Input
             type="number"
-            className="input"
             value={profile.daily_calorie_override || ''}
             onChange={(e) => update({ daily_calorie_override: e.target.value ? Number(e.target.value) : null })}
             placeholder="Auto (computed from goal)"
@@ -187,25 +187,25 @@ export default function Settings() {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <div>
-            <label className="label">Protein %</label>
-            <input type="number" className="input" value={profile.macro_protein_pct} onChange={(e) => update({ macro_protein_pct: Number(e.target.value) })} />
+            <Label>Protein %</Label>
+            <Input type="number" value={profile.macro_protein_pct} onChange={(e) => update({ macro_protein_pct: Number(e.target.value) })} />
           </div>
           <div>
-            <label className="label">Carbs %</label>
-            <input type="number" className="input" value={profile.macro_carbs_pct} onChange={(e) => update({ macro_carbs_pct: Number(e.target.value) })} />
+            <Label>Carbs %</Label>
+            <Input type="number" value={profile.macro_carbs_pct} onChange={(e) => update({ macro_carbs_pct: Number(e.target.value) })} />
           </div>
           <div>
-            <label className="label">Fat %</label>
-            <input type="number" className="input" value={profile.macro_fat_pct} onChange={(e) => update({ macro_fat_pct: Number(e.target.value) })} />
+            <Label>Fat %</Label>
+            <Input type="number" value={profile.macro_fat_pct} onChange={(e) => update({ macro_fat_pct: Number(e.target.value) })} />
           </div>
         </div>
         <div>
-          <label className="label">Water goal (ml)</label>
-          <input type="number" className="input" value={profile.water_target_ml} onChange={(e) => update({ water_target_ml: Number(e.target.value) })} />
+          <Label>Water goal (ml)</Label>
+          <Input type="number" value={profile.water_target_ml} onChange={(e) => update({ water_target_ml: Number(e.target.value) })} />
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4 space-y-3" data-testid="ai-settings">
+      <Card className="p-4 space-y-3" data-testid="ai-settings">
         <div className="flex items-center justify-between">
           <div className="font-semibold">AI settings</div>
           <span data-testid="ai-provider" className="chip">
@@ -219,21 +219,19 @@ export default function Settings() {
         {provider === 'ollama' && (
           <>
             <div>
-              <label className="label">Ollama server URL</label>
-              <input
+              <Label>Ollama server URL</Label>
+              <Input
                 data-testid="ollama-url"
-                className="input"
                 placeholder="https://your-oracle-ip"
                 value={profile.ollama_url || ''}
                 onChange={(e) => update({ ollama_url: e.target.value })}
               />
             </div>
             <div>
-              <label className="label">Ollama API key</label>
-              <input
+              <Label>Ollama API key</Label>
+              <Input
                 data-testid="ollama-key"
                 type="password"
-                className="input"
                 value={profile.ollama_api_key || ''}
                 onChange={(e) => update({ ollama_api_key: e.target.value })}
               />
@@ -247,8 +245,10 @@ export default function Settings() {
           </div>
         )}
         <div className="flex items-center gap-3">
-          <button
+          <Button
             data-testid="test-connection"
+            variant="secondary"
+            disabled={testing}
             onClick={async () => {
               setTesting(true);
               const res = provider === 'ollama'
@@ -257,11 +257,9 @@ export default function Settings() {
               setConnStatus({ checked: true, ok: res.ok, models: res.models || [], error: res.error || null });
               setTesting(false);
             }}
-            disabled={testing}
-            className="btn-secondary"
           >
             {testing ? 'Testing…' : 'Test connection'}
-          </button>
+          </Button>
           {connStatus.checked && (
             <span className="text-sm" data-testid="conn-status">
               {connStatus.ok
@@ -289,11 +287,10 @@ export default function Settings() {
 
         <div className="pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
           <div className="text-sm font-medium mb-1">Photo analysis (Gemini)</div>
-          <label className="label">Gemini API key</label>
-          <input
+          <Label>Gemini API key</Label>
+          <Input
             data-testid="gemini-key"
             type="password"
-            className="input"
             value={profile.gemini_api_key || ''}
             onChange={(e) => update({ gemini_api_key: e.target.value })}
           />
@@ -301,9 +298,9 @@ export default function Settings() {
             Get a free key at aistudio.google.com — required for photo calorie analysis.
           </div>
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4">
+      <Card className="p-4">
         <div className="font-semibold mb-2">My foods</div>
         {foods.length === 0 && <div className="text-sm" style={{ color: 'var(--text-muted)' }}>No saved foods yet</div>}
         <div className="max-h-60 overflow-auto divide-y" style={{ borderColor: 'var(--border)' }}>
@@ -317,30 +314,32 @@ export default function Settings() {
             </div>
           ))}
         </div>
-      </section>
+      </Card>
 
-      <section className="card p-4 space-y-3">
+      <Card className="p-4 space-y-3">
         <div className="font-semibold">Data</div>
         <div className="flex gap-2 flex-wrap">
-          <button onClick={exportData} disabled={exportBusy} className="btn-secondary">
+          <Button variant="secondary" onClick={exportData} disabled={exportBusy}>
             {exportBusy ? 'Exporting…' : 'Export all my data (JSON)'}
-          </button>
-          <label className="btn-secondary cursor-pointer">
-            Import from JSON
-            <input type="file" accept="application/json" className="hidden" onChange={importData} />
-          </label>
+          </Button>
+          <Button variant="secondary" asChild>
+            <label className="cursor-pointer">
+              Import from JSON
+              <input type="file" accept="application/json" className="hidden" onChange={importData} />
+            </label>
+          </Button>
         </div>
         {importStatus && <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{importStatus}</div>}
-      </section>
+      </Card>
 
-      <section className="card p-4 space-y-3">
+      <Card className="p-4 space-y-3">
         <div className="font-semibold">Account</div>
         <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{user?.email}</div>
         <div className="flex gap-2 flex-wrap">
-          <button onClick={signOut} className="btn-secondary">Sign out</button>
-          <button onClick={deleteAccount} className="btn" style={{ backgroundColor: 'var(--danger)', color: 'white' }}>Delete account</button>
+          <Button variant="secondary" onClick={signOut}>Sign out</Button>
+          <Button variant="destructive" onClick={deleteAccount}>Delete account</Button>
         </div>
-      </section>
+      </Card>
     </div>
   );
 }

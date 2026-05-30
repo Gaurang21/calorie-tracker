@@ -1,5 +1,9 @@
 import { useState, type ChangeEvent } from 'react';
 import { analyzeFoodPhoto, type PhotoAnalysisResult } from '../../services/geminiService';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
 import type { Meal, FoodLog } from '../../types/db';
 
 interface Props {
@@ -76,9 +80,9 @@ export default function PhotoUploadTab({ meal, onSave }: Props) {
         <div>
           <img src={preview} alt="meal" className="w-full max-h-60 object-cover rounded-xl" />
           {!result && (
-            <button onClick={analyze} disabled={analyzing} className="btn-primary w-full mt-3">
+            <Button onClick={analyze} disabled={analyzing} className="w-full mt-3">
               {analyzing ? 'Analyzing your meal…' : 'Analyze with AI'}
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -91,37 +95,37 @@ export default function PhotoUploadTab({ meal, onSave }: Props) {
       )}
 
       {result && editable && (
-        <div className="card p-3 space-y-2" data-testid="ai-result">
+        <Card className="p-3 space-y-2" data-testid="ai-result">
           <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
             Confidence: <span className="font-medium">{result.confidence}</span>
           </div>
           <div>
-            <label className="label">Description</label>
-            <input className="input" value={editable.name} onChange={(e) => setEditable({ ...editable, name: e.target.value })} />
+            <Label>Description</Label>
+            <Input value={editable.name} onChange={(e) => setEditable({ ...editable, name: e.target.value })} />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="label">Calories</label>
-              <input type="number" className="input" value={editable.calories} onChange={(e) => setEditable({ ...editable, calories: e.target.value })} />
+              <Label>Calories</Label>
+              <Input type="number" value={editable.calories} onChange={(e) => setEditable({ ...editable, calories: e.target.value })} />
             </div>
             <div>
-              <label className="label">Protein</label>
-              <input type="number" className="input" value={editable.protein_g} onChange={(e) => setEditable({ ...editable, protein_g: e.target.value })} />
+              <Label>Protein</Label>
+              <Input type="number" value={editable.protein_g} onChange={(e) => setEditable({ ...editable, protein_g: e.target.value })} />
             </div>
             <div>
-              <label className="label">Carbs</label>
-              <input type="number" className="input" value={editable.carbs_g} onChange={(e) => setEditable({ ...editable, carbs_g: e.target.value })} />
+              <Label>Carbs</Label>
+              <Input type="number" value={editable.carbs_g} onChange={(e) => setEditable({ ...editable, carbs_g: e.target.value })} />
             </div>
             <div>
-              <label className="label">Fat</label>
-              <input type="number" className="input" value={editable.fat_g} onChange={(e) => setEditable({ ...editable, fat_g: e.target.value })} />
+              <Label>Fat</Label>
+              <Input type="number" value={editable.fat_g} onChange={(e) => setEditable({ ...editable, fat_g: e.target.value })} />
             </div>
           </div>
           <div className="text-xs italic" style={{ color: 'var(--text-muted)' }}>
             AI estimates are approximate — please verify
           </div>
-          <button onClick={confirm} className="btn-primary w-full">Confirm & Log</button>
-        </div>
+          <Button onClick={confirm} className="w-full">Confirm & Log</Button>
+        </Card>
       )}
 
       {error && <div className="text-sm" style={{ color: 'var(--danger)' }}>{error}</div>}

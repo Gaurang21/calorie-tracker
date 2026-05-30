@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { localISO } from '../utils/date';
 import type { ISODate } from '../types/db';
 
 function isoDateOffset(days: number, base: Date = new Date()): ISODate {
   const d = new Date(base);
   d.setDate(d.getDate() - days);
-  return d.toISOString().slice(0, 10);
+  return localISO(d);
 }
 
 export function useStreak(): number {

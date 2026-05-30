@@ -49,7 +49,9 @@ export default function Settings() {
   if (!profile) return null;
 
   const toggleDark = async (): Promise<void> => {
-    await update({ dark_mode: !profile.dark_mode });
+    const next = !profile.dark_mode;
+    document.documentElement.classList.toggle('dark', next);
+    await update({ dark_mode: next });
   };
 
   const setUnits = async (u: Units) => update({ units: u });

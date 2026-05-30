@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { generateWeeklySummary } from '../../services/aiService';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { mondayOfLocal } from '../../utils/date';
 import type { Profile, ISODate } from '../../types/db';
 import type { WeekData } from '../../types/ai';
 import type { MacroTargets } from '../../utils/calculations';
@@ -14,13 +15,7 @@ interface Props {
   macroTargets: MacroTargets;
 }
 
-function mondayOf(date: Date = new Date()): ISODate {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = (day === 0 ? -6 : 1 - day);
-  d.setDate(d.getDate() + diff);
-  return d.toISOString().slice(0, 10);
-}
+const mondayOf = mondayOfLocal;
 
 export default function WeeklySummaryCard({ profile: _profile, calorieTarget, macroTargets }: Props) {
   const { user } = useAuth();

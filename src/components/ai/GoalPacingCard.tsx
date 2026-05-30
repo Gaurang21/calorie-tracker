@@ -5,6 +5,7 @@ import { generateGoalPacingMessage } from '../../services/aiService';
 import { GOAL_PACE_DELTA } from '../../utils/calculations';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { mondayOfLocal, todayLocalISO } from '../../utils/date';
 import type { Profile, GoalPace, ISODate } from '../../types/db';
 
 interface Props {
@@ -29,13 +30,7 @@ const PACE_LABEL: Record<GoalPace, string> = {
   gain_1kg: 'Gain 1 kg/week',
 };
 
-function mondayOf(date: Date = new Date()): ISODate {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = (day === 0 ? -6 : 1 - day);
-  d.setDate(d.getDate() + diff);
-  return d.toISOString().slice(0, 10);
-}
+const mondayOf = mondayOfLocal;
 
 export default function GoalPacingCard({ profile, calorieTarget }: Props) {
   const { user } = useAuth();
@@ -47,7 +42,7 @@ export default function GoalPacingCard({ profile, calorieTarget }: Props) {
   useEffect(() => {
     if (!user || !profile?.goal_pace || profile.goal_pace === 'maintain') return;
     const weekStart = mondayOf();
-    const today = new Date().toISOString().slice(0, 10);
+    const today = todayLocalISO();
     Promise.all([
       supabase.from('food_log').select('date, calories').eq('user_id', user.id).gte('date', weekStart).lte('date', today),
       supabase.from('activity_log').select('date, calories_burned').eq('user_id', user.id).gte('date', weekStart).lte('date', today),

@@ -9,6 +9,7 @@ import { useProfile } from '../hooks/useProfile';
 import { useDailyTargets } from '../hooks/useDailyTargets';
 import { Card } from '@/components/ui/card';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { localISO } from '../utils/date';
 import type { ISODate } from '../types/db';
 
 type SeriesRow = { date: string } & Record<string, string | number | null>;
@@ -24,7 +25,7 @@ function dateRange(days: number): { start: ISODate; end: ISODate } {
   const end = new Date();
   const start = new Date();
   start.setDate(end.getDate() - days + 1);
-  return { start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
+  return { start: localISO(start), end: localISO(end) };
 }
 
 function fillSeries<T extends { date: string }>(rows: T[], days: number, key: string, valueFn: (r: T) => number): SeriesRow[] {
@@ -33,7 +34,7 @@ function fillSeries<T extends { date: string }>(rows: T[], days: number, key: st
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    const iso = d.toISOString().slice(0, 10);
+    const iso = localISO(d);
     out.push({ date: iso.slice(5), [key]: map.get(iso) ?? 0 });
   }
   return out;

@@ -12,13 +12,15 @@ import { useOllama } from '../hooks/useOllama';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { todayLocalISO, daysAgoLocalISO } from '../utils/date';
 import type { Meal } from '../types/db';
 
-const todayISO = () => new Date().toISOString().slice(0, 10);
 const MEALS: Meal[] = ['breakfast', 'lunch', 'dinner', 'snacks'];
 
 export default function Log() {
-  const [date, setDate] = useState(todayISO());
+  const today = todayLocalISO();
+  const minDate = daysAgoLocalISO(7);
+  const [date, setDate] = useState(today);
   const { profile } = useProfile();
   const { byMeal, totals, addEntry, addEntries, deleteEntry } = useFoodLog(date);
   const { entries: activity, totalBurned, addEntry: addActivity, deleteEntry: deleteActivity } = useActivityLog(date);
@@ -38,13 +40,22 @@ export default function Log() {
 
   return (
     <div className="space-y-5">
-      <header className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Daily log</h1>
+      <header className="flex items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold">Daily log</h1>
+          {date !== today && (
+            <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+              Logging to a past day
+            </div>
+          )}
+        </div>
         <Input
           type="date"
           data-testid="log-date"
           className="max-w-[180px]"
           value={date}
+          min={minDate}
+          max={today}
           onChange={(e) => setDate(e.target.value)}
         />
       </header>

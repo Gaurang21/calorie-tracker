@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { generateDailyInsight } from '../../services/aiService';
+import { todayLocalISO } from '../../utils/date';
 import type { TodayData, RecentHistory } from '../../types/ai';
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
   recentHistory: RecentHistory;
 }
 
-const todayKey = () => new Date().toISOString().slice(0, 10);
+const todayKey = todayLocalISO;
 const DISMISS_KEY = `daily-insight-dismissed-${todayKey()}`;
 const CACHE_KEY = `daily-insight-${todayKey()}`;
 

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { todayLocalISO } from '../utils/date';
 import type { Sex, ActivityLevel, GoalPace, Units } from '../types/db';
 
 interface OnboardingData {
@@ -77,7 +78,7 @@ export default function Onboarding() {
       onboarding_complete: true,
     });
     if (user && data.weight_kg) {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = todayLocalISO();
       await supabase.from('weight_log').upsert({
         user_id: user.id,
         date: today,

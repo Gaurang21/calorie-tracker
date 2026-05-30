@@ -6,6 +6,7 @@ import { useDailyTargets } from '../hooks/useDailyTargets';
 import { answerDataQuestion } from '../services/aiService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { daysAgoLocalISO } from '../utils/date';
 import type { ISODate } from '../types/db';
 
 interface ChatMessage {
@@ -23,11 +24,7 @@ const STARTERS = [
   'What\'s my weight trend?',
 ];
 
-function isoDateOffset(days: number): ISODate {
-  const d = new Date();
-  d.setDate(d.getDate() - days);
-  return d.toISOString().slice(0, 10);
-}
+const isoDateOffset = (days: number): ISODate => daysAgoLocalISO(days);
 
 export default function AIChat() {
   const { user } = useAuth();

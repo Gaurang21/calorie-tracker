@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { todayLocalISO } from '../utils/date';
 
 interface NavyInputs { waistCm: string; neckCm: string; hipCm: string }
 
@@ -21,7 +22,7 @@ export default function Profile() {
   const [draft, setDraft] = useState<ProfileType | null>(null);
   const [weights, setWeights] = useState<WeightLog[]>([]);
   const [newWeight, setNewWeight] = useState('');
-  const [newDate, setNewDate] = useState(new Date().toISOString().slice(0, 10));
+  const [newDate, setNewDate] = useState(todayLocalISO());
   const [navy, setNavy] = useState<NavyInputs>({ waistCm: '', neckCm: '', hipCm: '' });
   const [importStatus, setImportStatus] = useState<string | null>(null);
 

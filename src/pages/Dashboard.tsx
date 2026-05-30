@@ -18,10 +18,9 @@ import MealSuggestionsCard from '../components/ai/MealSuggestionsCard';
 import WorkoutSuggestionCard from '../components/ai/WorkoutSuggestionCard';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { todayLocalISO, daysAgoLocalISO } from '../utils/date';
 import type { ActivityLogContext } from '../types/ai';
 import type { MealSuggestion } from '../types/ai';
-
-const todayISO = () => new Date().toISOString().slice(0, 10);
 
 function greeting() {
   const h = new Date().getHours();
@@ -32,7 +31,7 @@ function greeting() {
 
 export default function Dashboard() {
   const nav = useNavigate();
-  const date = todayISO();
+  const date = todayLocalISO();
   const { user } = useAuth();
   const { profile } = useProfile();
   const { entries: foodEntries, totals } = useFoodLog(date);
@@ -57,12 +56,11 @@ export default function Dashboard() {
   const [activityRecent, setActivityRecent] = useState<ActivityLogContext | null>(null);
   useEffect(() => {
     if (!user) return;
-    const since = new Date(); since.setDate(since.getDate() - 7);
     supabase
       .from('activity_log')
       .select('date, activity_type')
       .eq('user_id', user.id)
-      .gte('date', since.toISOString().slice(0, 10))
+      .gte('date', daysAgoLocalISO(7))
       .order('date', { ascending: false })
       .then(({ data }: { data: { date: string; activity_type: string }[] | null }) => {
         const sessions = data || [];

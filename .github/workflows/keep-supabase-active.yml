@@ -17,7 +17,12 @@ jobs:
             -H "apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}")
           echo "Supabase responded with HTTP $STATUS"
-          if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 500 ]; then
+          if [ "$STATUS" -eq 401 ]; then
+            echo "401 Unauthorized — the anon key secret is invalid or has extra whitespace."
+            exit 1
+          fi
+          if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 300 ]; then
             echo "Unexpected status code: $STATUS"
             exit 1
           fi
+          echo "Supabase is awake."

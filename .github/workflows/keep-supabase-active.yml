@@ -22,17 +22,14 @@ jobs:
             echo "A secret is EMPTY. Check that both are Repository secrets (not Environment secrets) and the names match exactly."
             exit 1
           fi
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+          STATUS=$(curl -s -o /tmp/resp.txt -w "%{http_code}" \
             "$SUPABASE_URL/rest/v1/" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY")
           echo "Supabase responded with HTTP $STATUS"
-          if [ "$STATUS" -eq 401 ]; then
-            echo "401 Unauthorized — the anon key secret is invalid or has extra whitespace."
-            exit 1
-          fi
+          echo "Response body: $(head -c 400 /tmp/resp.txt)"
           if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 300 ]; then
-            echo "Unexpected status code: $STATUS"
+            echo "Non-2xx response — see body above for the reason."
             exit 1
           fi
           echo "Supabase is awake."

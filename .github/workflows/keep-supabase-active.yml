@@ -22,8 +22,11 @@ jobs:
             echo "A secret is EMPTY. Check that both are Repository secrets (not Environment secrets) and the names match exactly."
             exit 1
           fi
+          # Query a real table with the anon key. RLS returns an empty set
+          # (still HTTP 200) for unauthenticated requests, which is all we
+          # need — it exercises PostgREST + Postgres and registers activity.
           STATUS=$(curl -s -o /tmp/resp.txt -w "%{http_code}" \
-            "$SUPABASE_URL/rest/v1/" \
+            "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY")
           echo "Supabase responded with HTTP $STATUS"
